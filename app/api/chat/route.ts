@@ -6,7 +6,7 @@ export async function POST(request: Request) {
 
   const completion = await createChatCompletion(
     result.apiKey,
-    result.maxTokens,
+    Number(result.maxTokens),
     result.direction,
     result.question
   );
