@@ -1,6 +1,6 @@
 const OPENAI_URL = `https://openai.yubolun.com/v1/chat/completions`;
 const OPENAI_MODEL = "gpt-3.5-turbo";
-const MAX_TOKENS = 4096;
+const MAX_TOKENS = 1024;
 
 export default async function createChatCompletion(
   apiKey: string,
