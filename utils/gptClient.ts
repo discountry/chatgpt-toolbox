@@ -4,7 +4,7 @@ const MAX_TOKENS = 4096;
 
 export default async function createChatCompletion(
   apiKey: string,
-  maxTokens: string,
+  maxTokens: number,
   direction: string,
   question: string
 ) {
