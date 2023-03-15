@@ -35,10 +35,12 @@ export default function App() {
   }, []);
 
   return (
-    <main className="container mx-auto max-w-lg px-4 py-24">
+    <main className="container mx-auto max-w-lg px-4 pt-12">
       <div className="flex flex-col">
         <div className="basis-full">
-          <h1 className="text-center text-3xl font-bold">ChatGPT Toolbox</h1>
+          <h1 className="my-2 text-center text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">
+            ChatGPT Toolbox
+          </h1>
         </div>
         <div className="flex flex-row">
           <div className="basis-3/4">
