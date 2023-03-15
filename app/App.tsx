@@ -3,7 +3,7 @@ import { SetStateAction, useEffect, useState } from "react";
 
 export default function App() {
   const [apiKey, setApiKey] = useState("");
-  const [maxTokens, setMaxTokens] = useState("4096");
+  const [maxTokens, setMaxTokens] = useState("3800");
   const [direction, setDirection] = useState("You are gpt 3.5");
   const [question, setQuestion] = useState("Hello, I am a human.");
   const [answer, setAnswer] = useState("Loading...");
