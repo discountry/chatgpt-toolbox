@@ -1,29 +1,74 @@
 "use client";
-import { SetStateAction, useEffect, useState } from "react";
+import createLiveChatCompletion from "@/utils/liveGptClient";
+import { SetStateAction, useEffect, useRef, useState } from "react";
 
-export default function App() {
+export default function App({
+  defaultDirection,
+}: {
+  defaultDirection?: string;
+}) {
   const [apiKey, setApiKey] = useState("");
   const [maxTokens, setMaxTokens] = useState("2048");
-  const [direction, setDirection] = useState("You are gpt 3.5");
+  const [direction, setDirection] = useState(
+    defaultDirection ? defaultDirection : "You are gpt 3.5"
+  );
   const [question, setQuestion] = useState("Hello, I am a human.");
   const [answer, setAnswer] = useState("...");
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const resultRef = useRef("");
 
   const storeApiKey = (e: { target: { value: SetStateAction<string> } }) => {
     setApiKey(e.target.value);
     localStorage.setItem("apiKey", String(e.target.value));
   };
 
-  const getAnswer = async () => {
-    const res = await fetch("/api/chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ apiKey, maxTokens, direction, question }),
-    });
-    const data = await res.json();
+  const handleSubmitPromptBtnClicked = () => {
+    if (question !== "") {
+      setIsLoading(true);
+      setAnswer("");
 
-    setAnswer(data);
+      const source = createLiveChatCompletion(
+        apiKey,
+        Number(maxTokens),
+        direction,
+        question
+      );
+
+      source.addEventListener("message", (e: { data: string }) => {
+        if (e.data != "[DONE]") {
+          const payload = JSON.parse(e.data);
+          if (
+            Object.prototype.hasOwnProperty.call(
+              payload.choices[0].delta,
+              "content"
+            )
+          ) {
+            const text = payload.choices[0].delta.content;
+            if (text != "\n") {
+              resultRef.current = resultRef.current + text;
+              setAnswer(resultRef.current);
+            }
+          }
+        } else {
+          source.close();
+        }
+      });
+
+      source.addEventListener(
+        "readystatechange",
+        (e: { readyState: number }) => {
+          if (e.readyState >= 2) {
+            setIsLoading(false);
+          }
+        }
+      );
+
+      source.stream();
+    } else {
+      alert("Please insert a prompt!");
+    }
   };
 
   useEffect(() => {
@@ -33,6 +78,10 @@ export default function App() {
       setApiKey(localKey);
     }
   }, []);
+
+  useEffect(() => {
+    resultRef.current = answer;
+  }, [answer]);
 
   return (
     <main className="container mx-auto max-w-lg px-4 pt-12">
@@ -100,10 +149,15 @@ export default function App() {
         </div>
         <div className="basis-full">
           <button
-            className="w-full px-6 py-2 my-2 text-indigo-700 border-2 border-indigo-500 hover:bg-indigo-500 hover:text-indigo-100"
-            onClick={getAnswer}
+            disabled={isLoading}
+            className={
+              isLoading
+                ? "w-full px-6 py-2 my-2 text-gray-700 border-2 border-gray-500 hover:bg-gray-500 hover:text-gray-100"
+                : "w-full px-6 py-2 my-2 text-indigo-700 border-2 border-indigo-500 hover:bg-indigo-500 hover:text-indigo-100"
+            }
+            onClick={handleSubmitPromptBtnClicked}
           >
-            Submit
+            {isLoading ? `Loading...` : `Submit`}
           </button>
         </div>
         <div className="basis-full">

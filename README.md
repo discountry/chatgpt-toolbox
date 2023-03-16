@@ -1,6 +1,13 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## ChatGPT Toolbox
 
-## Getting Started
+## Features
+
+- [*] /tool/[system direction] `/tool/you are a translator`
+- [*] openai streaming
+
+## Development
+
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 First, run the development server:
 

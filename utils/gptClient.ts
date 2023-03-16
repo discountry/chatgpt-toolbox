@@ -1,6 +1,4 @@
-const OPENAI_URL = `https://openai.yubolun.com/v1/chat/completions`;
-const OPENAI_MODEL = "gpt-3.5-turbo";
-const MAX_TOKENS = 1024;
+import { MAX_TOKENS, OPENAI_MODEL, OPENAI_URL } from "./config";
 
 export default async function createChatCompletion(
   apiKey: string,
