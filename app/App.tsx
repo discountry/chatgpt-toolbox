@@ -3,10 +3,10 @@ import { SetStateAction, useEffect, useState } from "react";
 
 export default function App() {
   const [apiKey, setApiKey] = useState("");
-  const [maxTokens, setMaxTokens] = useState("3800");
+  const [maxTokens, setMaxTokens] = useState("2048");
   const [direction, setDirection] = useState("You are gpt 3.5");
   const [question, setQuestion] = useState("Hello, I am a human.");
-  const [answer, setAnswer] = useState("Loading...");
+  const [answer, setAnswer] = useState("...");
 
   const storeApiKey = (e: { target: { value: SetStateAction<string> } }) => {
     setApiKey(e.target.value);
