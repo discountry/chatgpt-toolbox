@@ -1,6 +1,15 @@
 "use client";
 import createLiveChatCompletion from "@/utils/liveGptClient";
+import hljs from "highlight.js";
+import { marked } from "marked";
 import { SetStateAction, useEffect, useRef, useState } from "react";
+
+marked.setOptions({
+  langPrefix: "hljs language-",
+  highlight: function (code) {
+    return hljs.highlightAuto(code, ["html", "javascript"]).value;
+  },
+});
 
 export default function App({
   defaultDirection,
@@ -46,10 +55,8 @@ export default function App({
             )
           ) {
             const text = payload.choices[0].delta.content;
-            if (text != "\n") {
-              resultRef.current = resultRef.current + text;
-              setAnswer(resultRef.current);
-            }
+            resultRef.current = resultRef.current + text;
+            setAnswer(resultRef.current);
           }
         } else {
           source.close();
@@ -61,6 +68,7 @@ export default function App({
         (e: { readyState: number }) => {
           if (e.readyState >= 2) {
             setIsLoading(false);
+            genetrateCopyButton();
           }
         }
       );
@@ -68,6 +76,44 @@ export default function App({
       source.stream();
     } else {
       alert("Please insert a prompt!");
+    }
+  };
+
+  const genetrateCopyButton = async () => {
+    const copyButtonLabel = "Copy";
+
+    // use a class selector if available
+    let blocks = document.querySelectorAll("pre");
+
+    blocks.forEach((block) => {
+      // only add button if browser supports Clipboard API
+      if (navigator.clipboard && block.childNodes.length < 2) {
+        let button = document.createElement("button");
+
+        button.innerText = copyButtonLabel;
+        block.appendChild(button);
+
+        button.addEventListener("click", async () => {
+          await copyCode(block, button);
+        });
+      }
+    });
+
+    async function copyCode(
+      block: HTMLPreElement,
+      button: { innerText: string } | undefined
+    ) {
+      let code = block.querySelector("code");
+      let text = code!.innerText;
+
+      await navigator.clipboard.writeText(text);
+
+      // visual feedback that task is completed
+      button!.innerText = "Copied";
+
+      setTimeout(() => {
+        button!.innerText = copyButtonLabel;
+      }, 700);
     }
   };
 
@@ -165,12 +211,9 @@ export default function App({
             <span className="text-xs font-semibold inline-block py-1 px-2 my-2 uppercase rounded text-slate-600 bg-slate-200 last:mr-0 mr-1">
               Assistant
             </span>
-            <textarea
-              readOnly
-              className="resize-none h-56 w-full px-5 py-2 font-medium border border-b-4 border-r-4 border-black rounded-lg shadow-lg hover:shadow-sm"
-              name="assistant"
-              value={answer}
-              onChange={(e) => setAnswer(e.target.value)}
+            <div
+              className="overflow-auto h-56 w-full px-5 py-2 font-medium border border-b-4 border-r-4 border-black rounded-lg shadow-lg hover:shadow-sm"
+              dangerouslySetInnerHTML={{ __html: marked.parse(answer) }}
             />
           </label>
         </div>
