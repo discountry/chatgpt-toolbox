@@ -152,8 +152,8 @@ export default function App({
             disabled={isLoading}
             className={
               isLoading
-                ? "w-full px-6 py-2 my-2 text-gray-700 border-2 border-gray-500 hover:bg-gray-500 hover:text-gray-100"
-                : "w-full px-6 py-2 my-2 text-indigo-700 border-2 border-indigo-500 hover:bg-indigo-500 hover:text-indigo-100"
+                ? "w-full px-6 py-2 my-2 text-gray-700 border-2 border-r-4 border-gray-500 hover:bg-gray-500 hover:text-gray-100"
+                : "w-full px-6 py-2 my-2 text-indigo-700 border-2 border-r-4 border-indigo-500 hover:bg-indigo-500 hover:text-indigo-100"
             }
             onClick={handleSubmitPromptBtnClicked}
           >
