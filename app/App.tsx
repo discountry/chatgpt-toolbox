@@ -92,7 +92,7 @@ export default function App({
           </h1>
         </div>
         <div className="flex flex-row">
-          <div className="basis-3/4">
+          <div className="basis-full">
             <label>
               <span className="text-xs font-semibold inline-block py-1 px-2 my-2 uppercase rounded text-teal-600 bg-teal-200 uppercase last:mr-0 mr-1">
                 API_KEY
@@ -106,7 +106,7 @@ export default function App({
               />
             </label>
           </div>
-          <div className="basis-1/4 pl-2">
+          {/* <div className="basis-1/4 pl-2">
             <label>
               <span className="text-xs font-semibold inline-block py-1 px-2 my-2 uppercase rounded text-yellow-600 bg-yellow-200 uppercase last:mr-0 mr-1">
                 max_tokens
@@ -119,7 +119,7 @@ export default function App({
                 onChange={(e) => setMaxTokens(e.target.value)}
               />
             </label>
-          </div>
+          </div> */}
         </div>
         <div className="basis-full">
           <label>

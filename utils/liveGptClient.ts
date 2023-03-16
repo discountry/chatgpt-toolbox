@@ -16,7 +16,7 @@ export default function createLiveChatCompletion(
     model: OPENAI_MODEL,
     messages: prompt,
     temperature: 0.7,
-    max_tokens: maxTokens ? maxTokens : MAX_TOKENS,
+    // max_tokens: maxTokens ? maxTokens : MAX_TOKENS,
     stream: true,
   };
 
