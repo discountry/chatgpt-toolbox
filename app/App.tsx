@@ -94,7 +94,7 @@ export default function App({
         <div className="flex flex-row">
           <div className="basis-full">
             <label>
-              <span className="text-xs font-semibold inline-block py-1 px-2 my-2 uppercase rounded text-teal-600 bg-teal-200 uppercase last:mr-0 mr-1">
+              <span className="text-xs font-semibold inline-block py-1 px-2 my-2 uppercase rounded text-teal-600 bg-teal-200 last:mr-0 mr-1">
                 API_KEY
               </span>
               <input
@@ -108,7 +108,7 @@ export default function App({
           </div>
           {/* <div className="basis-1/4 pl-2">
             <label>
-              <span className="text-xs font-semibold inline-block py-1 px-2 my-2 uppercase rounded text-yellow-600 bg-yellow-200 uppercase last:mr-0 mr-1">
+              <span className="text-xs font-semibold inline-block py-1 px-2 my-2 uppercase rounded text-yellow-600 bg-yellow-200 last:mr-0 mr-1">
                 max_tokens
               </span>
               <input
@@ -123,7 +123,7 @@ export default function App({
         </div>
         <div className="basis-full">
           <label>
-            <span className="text-xs font-semibold inline-block py-1 px-2 my-2 uppercase rounded text-red-600 bg-red-200 uppercase last:mr-0 mr-1">
+            <span className="text-xs font-semibold inline-block py-1 px-2 my-2 uppercase rounded text-red-600 bg-red-200 last:mr-0 mr-1">
               System
             </span>
             <textarea
@@ -136,7 +136,7 @@ export default function App({
         </div>
         <div className="basis-full">
           <label>
-            <span className="text-xs font-semibold inline-block py-1 px-2 my-2 uppercase rounded text-blue-600 bg-blue-200 uppercase last:mr-0 mr-1">
+            <span className="text-xs font-semibold inline-block py-1 px-2 my-2 uppercase rounded text-blue-600 bg-blue-200 last:mr-0 mr-1">
               User
             </span>
             <textarea
@@ -162,7 +162,7 @@ export default function App({
         </div>
         <div className="basis-full">
           <label>
-            <span className="text-xs font-semibold inline-block py-1 px-2 my-2 uppercase rounded text-slate-600 bg-slate-200 uppercase last:mr-0 mr-1">
+            <span className="text-xs font-semibold inline-block py-1 px-2 my-2 uppercase rounded text-slate-600 bg-slate-200 last:mr-0 mr-1">
               Assistant
             </span>
             <textarea
