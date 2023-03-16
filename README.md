@@ -4,6 +4,8 @@
 
 - [x] /tool/[system direction] `/tool/you are a translator`
 - [x] openai streaming
+- [x] markdown support
+- [x] code highlight & copy to clipboard
 
 ## Development
 
