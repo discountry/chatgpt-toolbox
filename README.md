@@ -2,8 +2,8 @@
 
 ## Features
 
-- [*] /tool/[system direction] `/tool/you are a translator`
-- [*] openai streaming
+- [x] /tool/[system direction] `/tool/you are a translator`
+- [x] openai streaming
 
 ## Development
 
