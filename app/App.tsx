@@ -34,7 +34,7 @@ export default function App({
   };
 
   const handleSubmitPromptBtnClicked = () => {
-    if (question !== "") {
+    if (question !== "" && !isLoading) {
       setIsLoading(true);
       setAnswer("");
 
@@ -130,29 +130,30 @@ export default function App({
   }, [answer]);
 
   return (
-    <main className="container mx-auto max-w-lg px-4 pt-12">
-      <div className="flex flex-col">
+    <main className="container mx-auto max-w-lg xl:max-w-screen-xl px-4 pt-6">
+      <div className="flex flex-col xl:flex-row xl:flex-wrap">
         <div className="basis-full">
-          <h1 className="my-2 text-center text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">
+          <h1 className="text-center text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">
             ChatGPT Toolbox
           </h1>
         </div>
-        <div className="flex flex-row">
-          <div className="basis-full">
-            <label>
-              <span className="text-xs font-semibold inline-block py-1 px-2 my-2 uppercase rounded text-teal-600 bg-teal-200 last:mr-0 mr-1">
-                API_KEY
-              </span>
-              <input
-                className="resize-none h-8 w-full px-5 py-2 font-medium border border-b-4 border-r-4 border-black rounded-lg shadow-lg hover:shadow-sm"
-                name="apiKey"
-                type="password"
-                value={apiKey}
-                onChange={storeApiKey}
-              />
-            </label>
-          </div>
-          {/* <div className="basis-1/4 pl-2">
+        <div className="basis-full xl:basis-1/2 xl:pr-2">
+          <div className="flex flex-row">
+            <div className="basis-full">
+              <label>
+                <span className="text-xs font-semibold inline-block py-1 px-2 my-2 uppercase rounded text-teal-600 bg-teal-200 last:mr-0 mr-1">
+                  API_KEY
+                </span>
+                <input
+                  className="resize-none h-8 xl:h-12 w-full px-5 py-2 font-medium border border-b-4 border-r-4 border-black rounded-lg shadow-lg hover:shadow-sm"
+                  name="apiKey"
+                  type="password"
+                  value={apiKey}
+                  onChange={storeApiKey}
+                />
+              </label>
+            </div>
+            {/* <div className="basis-1/4 pl-2">
             <label>
               <span className="text-xs font-semibold inline-block py-1 px-2 my-2 uppercase rounded text-yellow-600 bg-yellow-200 last:mr-0 mr-1">
                 max_tokens
@@ -166,8 +167,9 @@ export default function App({
               />
             </label>
           </div> */}
+          </div>
         </div>
-        <div className="basis-full">
+        <div className="basis-full xl:basis-1/2  xl:pl-2">
           <label>
             <span className="text-xs font-semibold inline-block py-1 px-2 my-2 uppercase rounded text-red-600 bg-red-200 last:mr-0 mr-1">
               System
@@ -186,7 +188,7 @@ export default function App({
               User
             </span>
             <textarea
-              className="resize-none h-56 w-full px-5 py-2 font-medium border border-b-4 border-r-4 border-black rounded-lg shadow-lg hover:shadow-sm"
+              className="resize-none h-56 xl:h-24 w-full px-5 py-2 font-medium border border-b-4 border-r-4 border-black rounded-lg shadow-lg hover:shadow-sm"
               name="user"
               value={question}
               onChange={(e) => setQuestion(e.target.value)}
@@ -212,7 +214,7 @@ export default function App({
               Assistant
             </span>
             <div
-              className="overflow-auto h-56 w-full px-5 py-2 font-medium border border-b-4 border-r-4 border-black rounded-lg shadow-lg hover:shadow-sm"
+              className="overflow-auto h-56 xl:h-96 w-full px-5 py-2 font-medium border border-b-4 border-r-4 border-black rounded-lg shadow-lg hover:shadow-sm"
               dangerouslySetInnerHTML={{ __html: marked.parse(answer) }}
             />
           </label>
