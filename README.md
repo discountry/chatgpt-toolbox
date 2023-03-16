@@ -1,5 +1,7 @@
 ## ChatGPT Toolbox
 
+User-Friendly Web Interface for ChatGPT.
+
 ## Features
 
 - [x] /tool/[system direction] `/tool/you are a translator`
