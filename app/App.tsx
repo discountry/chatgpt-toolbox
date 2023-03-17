@@ -6,7 +6,7 @@ import { SetStateAction, useEffect, useRef, useState } from "react";
 
 marked.setOptions({
   langPrefix: "hljs language-",
-  highlight: function (code) {
+  highlight: function (code: any) {
     return hljs.highlightAuto(code, ["html", "javascript"]).value;
   },
 });
