@@ -28,6 +28,8 @@ export default function App({
 
   const resultRef = useRef("");
 
+  const tailRef = useRef("");
+
   const storeApiKey = (e: { target: { value: SetStateAction<string> } }) => {
     setApiKey(e.target.value);
     localStorage.setItem("apiKey", String(e.target.value));
@@ -55,7 +57,14 @@ export default function App({
             )
           ) {
             const text = payload.choices[0].delta.content;
-            resultRef.current = resultRef.current + text;
+            if (text.includes("```")) {
+              if (tailRef.current === "") {
+                tailRef.current = "```";
+              } else {
+                tailRef.current = "";
+              }
+            }
+            resultRef.current = resultRef.current + text + tailRef.current;
             setAnswer(resultRef.current);
           }
         } else {
