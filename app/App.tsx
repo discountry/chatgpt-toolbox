@@ -57,14 +57,21 @@ export default function App({
             )
           ) {
             const text = payload.choices[0].delta.content;
+
             if (text.includes("```")) {
               if (tailRef.current === "") {
-                tailRef.current = "```";
+                tailRef.current = "\n```";
               } else {
                 tailRef.current = "";
               }
             }
+
+            if (text === "`") {
+              tailRef.current = "";
+            }
+
             resultRef.current = resultRef.current + text;
+
             setAnswer(resultRef.current);
           }
         } else {
@@ -76,8 +83,11 @@ export default function App({
         "readystatechange",
         (e: { readyState: number }) => {
           if (e.readyState >= 2) {
+            tailRef.current = "";
             setIsLoading(false);
-            genetrateCopyButton();
+            setTimeout(() => {
+              genetrateCopyButton();
+            }, 1000);
           }
         }
       );

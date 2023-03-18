@@ -5,7 +5,8 @@ export default function createLiveChatCompletion(
   apiKey: string,
   maxTokens: number,
   direction: string,
-  question: string
+  question: string | any[],
+  type = "tool"
 ) {
   const prompt = [
     { role: "system", content: direction },
@@ -14,7 +15,7 @@ export default function createLiveChatCompletion(
 
   const data = {
     model: OPENAI_MODEL,
-    messages: prompt,
+    messages: type === "tool" ? prompt : question,
     temperature: 0.7,
     // max_tokens: maxTokens ? maxTokens : MAX_TOKENS,
     stream: true,
