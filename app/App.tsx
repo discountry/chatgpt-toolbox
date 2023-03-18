@@ -64,7 +64,7 @@ export default function App({
                 tailRef.current = "";
               }
             }
-            resultRef.current = resultRef.current + text + tailRef.current;
+            resultRef.current = resultRef.current + text;
             setAnswer(resultRef.current);
           }
         } else {
@@ -224,7 +224,9 @@ export default function App({
             </span>
             <div
               className="overflow-auto h-56 xl:h-96 w-full px-5 py-2 font-medium border border-b-4 border-r-4 border-black rounded-lg shadow-lg hover:shadow-sm"
-              dangerouslySetInnerHTML={{ __html: marked.parse(answer) }}
+              dangerouslySetInnerHTML={{
+                __html: marked.parse(answer + tailRef.current),
+              }}
             />
           </label>
         </div>
