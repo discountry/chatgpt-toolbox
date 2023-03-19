@@ -9,6 +9,7 @@ User-Friendly Web Interface for ChatGPT.
 - [x] markdown support
 - [x] code highlight & copy to clipboard
 - [x] responsive design
+- [x] conversation mode
 
 ## Run your own
 
