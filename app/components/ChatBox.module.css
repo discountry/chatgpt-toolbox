@@ -1,7 +1,7 @@
 .chat-box {
   display: flex;
   flex-direction: column;
-  height: 95vh;
+  height: 100vh;
   overflow: hidden;
 }
 
@@ -14,7 +14,7 @@
 }
 
 .message {
-  display: inline-flex;
+  /* display: inline-flex; */
   align-items: center;
   max-width: 80%;
   margin: 10px;
@@ -22,6 +22,10 @@
   border-radius: 10px;
   color: #fff;
   font-size: 1.2em;
+}
+
+.message pre {
+  background-color: #202124;
 }
 
 .sent {

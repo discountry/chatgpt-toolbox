@@ -1,12 +1,24 @@
 "use client";
+import { genetrateCopyButton, getLongestArray } from "@/utils/helper";
 import createLiveChatCompletion from "@/utils/liveGptClient";
-import { SetStateAction, useEffect, useState } from "react";
+import hljs from "highlight.js";
+import { marked } from "marked";
+import { SetStateAction, useEffect, useRef, useState } from "react";
 import styles from "./ChatBox.module.css";
+
+marked.setOptions({
+  langPrefix: "hljs language-",
+  highlight: function (code: any) {
+    return hljs.highlightAuto(code, ["html", "javascript"]).value;
+  },
+});
 
 const ChatBox = () => {
   const [messages, setMessages] = useState<any[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
 
   const handleInputChange = (event: {
     target: { value: SetStateAction<string> };
@@ -32,7 +44,7 @@ const ChatBox = () => {
         localStorage.getItem("apiKey") as string,
         1024,
         "You are chatgpt3.5, a chatbot that uses OpenAI's GPT-3 API.",
-        messages,
+        getLongestArray(messages),
         "chat"
       );
 
@@ -70,6 +82,9 @@ const ChatBox = () => {
         (e: { readyState: number }) => {
           if (e.readyState >= 2) {
             setIsLoading(false);
+            setTimeout(() => {
+              genetrateCopyButton();
+            }, 1000);
           }
         }
       );
@@ -85,12 +100,17 @@ const ChatBox = () => {
       getGPTReply(messages[messages.length - 1]?.content);
     }
 
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop =
+        messagesContainerRef.current.scrollHeight;
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages]);
 
   return (
     <div className={styles["chat-box"]}>
-      <div className={styles["messages-container"]}>
+      <div ref={messagesContainerRef} className={styles["messages-container"]}>
         {messages.map((message, index) => (
           <div
             key={index}
@@ -98,7 +118,11 @@ const ChatBox = () => {
               message.role === "user" ? styles["sent"] : styles["received"]
             }`}
           >
-            <p>{message.content}</p>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: marked.parse(message.content),
+              }}
+            />
           </div>
         ))}
       </div>

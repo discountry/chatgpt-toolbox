@@ -1,4 +1,5 @@
 "use client";
+import { genetrateCopyButton } from "@/utils/helper";
 import createLiveChatCompletion from "@/utils/liveGptClient";
 import hljs from "highlight.js";
 import { marked } from "marked";
@@ -6,7 +7,7 @@ import { SetStateAction, useEffect, useRef, useState } from "react";
 
 marked.setOptions({
   langPrefix: "hljs language-",
-  highlight: function (code: any) {
+  highlight: function (code: any, lang: string) {
     return hljs.highlightAuto(code, ["html", "javascript"]).value;
   },
 });
@@ -95,44 +96,6 @@ export default function App({
       source.stream();
     } else {
       alert("Please insert a prompt!");
-    }
-  };
-
-  const genetrateCopyButton = async () => {
-    const copyButtonLabel = "Copy";
-
-    // use a class selector if available
-    let blocks = document.querySelectorAll("pre");
-
-    blocks.forEach((block) => {
-      // only add button if browser supports Clipboard API
-      if (navigator.clipboard && block.childNodes.length < 2) {
-        let button = document.createElement("button");
-
-        button.innerText = copyButtonLabel;
-        block.appendChild(button);
-
-        button.addEventListener("click", async () => {
-          await copyCode(block, button);
-        });
-      }
-    });
-
-    async function copyCode(
-      block: HTMLPreElement,
-      button: { innerText: string } | undefined
-    ) {
-      let code = block.querySelector("code");
-      let text = code!.innerText;
-
-      await navigator.clipboard.writeText(text);
-
-      // visual feedback that task is completed
-      button!.innerText = "Copied";
-
-      setTimeout(() => {
-        button!.innerText = copyButtonLabel;
-      }, 700);
     }
   };
 
