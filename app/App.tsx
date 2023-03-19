@@ -201,12 +201,14 @@ export default function App({
             <span className="text-xs font-semibold inline-block py-1 px-2 my-2 uppercase rounded text-slate-600 bg-slate-200 last:mr-0 mr-1">
               Assistant
             </span>
-            <div
-              className="overflow-auto h-56 xl:h-96 w-full px-5 py-2 font-medium border border-b-4 border-r-4 border-black rounded-lg shadow-lg hover:shadow-sm"
-              dangerouslySetInnerHTML={{
-                __html: marked.parse(answer + tailRef.current),
-              }}
-            />
+            <div className="overflow-auto h-56 xl:h-96 w-full px-5 py-2 font-medium border border-b-4 border-r-4 border-black rounded-lg shadow-lg hover:shadow-sm">
+              <div
+                className="flex flex-col"
+                dangerouslySetInnerHTML={{
+                  __html: marked.parse(answer + tailRef.current),
+                }}
+              />
+            </div>
           </label>
         </div>
       </div>

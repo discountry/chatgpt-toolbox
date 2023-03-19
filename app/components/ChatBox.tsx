@@ -129,6 +129,7 @@ const ChatBox = () => {
               }`}
             >
               <div
+                className={styles["message-content"]}
                 dangerouslySetInnerHTML={{
                   __html: marked.parse(message.content),
                 }}

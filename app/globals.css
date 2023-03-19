@@ -5,20 +5,25 @@
 pre {
   overflow: auto;
   position: relative;
-  padding: 1.75rem 0 1.75rem 1rem;
+  padding: 1rem;
+  margin-bottom: 10px;
   background-color: #f7fafc;
+  border-radius: 0.25rem;
 }
 
 .hljs {
   background: transparent !important;
 }
 
-pre button {
-  position: absolute;
-  top: 5px;
-  right: 5px;
+pre code.hljs {
+  padding: 0;
+}
+
+.copy-button {
+  align-self: end;
   border: #999 solid 1px;
   border-radius: 0.25rem;
+  margin: 5px 0;
   padding: 0 5px;
   font-size: 0.5rem;
 }

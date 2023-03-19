@@ -20,11 +20,15 @@ export const genetrateCopyButton = async () => {
 
   blocks.forEach((block) => {
     // only add button if browser supports Clipboard API
-    if (navigator.clipboard && block.childNodes.length < 2) {
+    if (
+      navigator.clipboard &&
+      (block.previousSibling as HTMLButtonElement).tagName !== "BUTTON"
+    ) {
       let button = document.createElement("button");
-
+      button.classList.add("copy-button");
       button.innerText = copyButtonLabel;
-      block.appendChild(button);
+
+      block.parentNode!.insertBefore(button, block);
 
       button.addEventListener("click", async () => {
         await copyCode(block, button);

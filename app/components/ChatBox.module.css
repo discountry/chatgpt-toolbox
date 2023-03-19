@@ -41,6 +41,11 @@
   align-self: flex-start;
 }
 
+.message-content {
+  display: flex;
+  flex-direction: column;
+}
+
 .input-container {
   position: fixed;
   bottom: 0;
