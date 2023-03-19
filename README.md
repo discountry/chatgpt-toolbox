@@ -7,7 +7,7 @@ I'm using chatGPT itself to write this application. For example, 90% of the code
 ## Pages
 
 * [index](https://chatgpt.yubolun.com/)
-* [tool](https://chatgpt.yubolun.com/tool/you are a translator)
+* [tool](https://chatgpt.yubolun.com/tool/you%20are%20a%20translator)
 * [chat](https://chatgpt.yubolun.com/chat)
 
 ## Features
