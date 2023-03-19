@@ -1,8 +1,7 @@
 .chat-box {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  min-height: -webkit-fill-available;
+  height: 100%;
   overflow: hidden;
 }
 
@@ -40,10 +39,12 @@
 }
 
 .input-container {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
   display: flex;
   align-items: center;
   padding: 10px;
-  padding-bottom: env(safe-area-inset-bottom);
   background-color: #f8f9fa !important;
 }
 
