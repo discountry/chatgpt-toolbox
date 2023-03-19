@@ -17,25 +17,26 @@
 .message {
   /* display: inline-flex; */
   align-items: center;
-  max-width: 80%;
+  max-width: 75%;
   margin: 10px;
-  padding: 10px;
+  padding: 0 10px;
   border-radius: 10px;
-  color: #fff;
-  font-size: 1.2em;
+  color: #000;
+  font-size: 1em;
 }
 
-.message pre {
-  background-color: #202124;
+.message p {
+  margin: 0.5rem;
 }
 
 .sent {
+  color: #fff;
   background-color: #007bff !important;
   align-self: flex-end;
 }
 
 .received {
-  background-color: #6c757d !important;
+  background-color: #d8d8d8 !important;
   align-self: flex-start;
 }
 

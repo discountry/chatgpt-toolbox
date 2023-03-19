@@ -9,7 +9,13 @@ import styles from "./ChatBox.module.css";
 marked.setOptions({
   langPrefix: "hljs language-",
   highlight: function (code: any) {
-    return hljs.highlightAuto(code, ["html", "javascript"]).value;
+    return hljs.highlightAuto(code, [
+      "html",
+      "javascript",
+      "python",
+      "rust",
+      "go",
+    ]).value;
   },
 });
 

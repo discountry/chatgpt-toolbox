@@ -8,7 +8,13 @@ import { SetStateAction, useEffect, useRef, useState } from "react";
 marked.setOptions({
   langPrefix: "hljs language-",
   highlight: function (code: any, lang: string) {
-    return hljs.highlightAuto(code, ["html", "javascript"]).value;
+    return hljs.highlightAuto(code, [
+      "html",
+      "javascript",
+      "python",
+      "rust",
+      "go",
+    ]).value;
   },
 });
 

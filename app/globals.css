@@ -9,6 +9,10 @@ pre {
   background-color: #f7fafc;
 }
 
+.hljs {
+  background: transparent !important;
+}
+
 pre button {
   position: absolute;
   top: 5px;
