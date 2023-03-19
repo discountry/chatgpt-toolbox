@@ -109,24 +109,28 @@ const ChatBox = () => {
   }, [messages]);
 
   return (
-    <div className={styles["chat-box"]}>
-      <div ref={messagesContainerRef} className={styles["messages-container"]}>
-        {messages.map((message, index) => (
-          <div
-            key={index}
-            className={`${styles["message"]} ${
-              message.role === "user" ? styles["sent"] : styles["received"]
-            }`}
-          >
+    <>
+      <div className={styles["chat-box"]}>
+        <div
+          ref={messagesContainerRef}
+          className={styles["messages-container"]}
+        >
+          {messages.map((message, index) => (
             <div
-              dangerouslySetInnerHTML={{
-                __html: marked.parse(message.content),
-              }}
-            />
-          </div>
-        ))}
+              key={index}
+              className={`${styles["message"]} ${
+                message.role === "user" ? styles["sent"] : styles["received"]
+              }`}
+            >
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: marked.parse(message.content),
+                }}
+              />
+            </div>
+          ))}
+        </div>
       </div>
-
       <form className={styles["input-container"]} onSubmit={handleFormSubmit}>
         <input
           className={styles["chat-input"]}
@@ -143,7 +147,7 @@ const ChatBox = () => {
           Send
         </button>
       </form>
-    </div>
+    </>
   );
 };
 
