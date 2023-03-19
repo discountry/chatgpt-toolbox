@@ -6,9 +6,9 @@ I'm using chatGPT itself to write this application. For example, 90% of the code
 
 ## Pages
 
-* [index](https://chatgpt.yubolun.com/)
-* [tool](https://chatgpt.yubolun.com/tool/you%20are%20a%20translator)
-* [chat](https://chatgpt.yubolun.com/chat)
+* [index](https://chatgpt.yubolun.com/) Using chatGPT as a tool.
+* [tool](https://chatgpt.yubolun.com/tool/you%20are%20a%20translator) Share your tool settings via url
+* [chat](https://chatgpt.yubolun.com/chat) Have a conversation with ChatGPT, just like on the official site.
 
 ## Features
 
