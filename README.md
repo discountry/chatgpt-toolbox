@@ -2,6 +2,14 @@
 
 User-Friendly Web Interface for ChatGPT.
 
+I'm using chatGPT itself to write this application. For example, 90% of the code on the `/chat` page was written by chatGPT.
+
+## Pages
+
+* [index](https://chatgpt.yubolun.com/)
+* [tool](https://chatgpt.yubolun.com/tool/you are a translator)
+* [chat](https://chatgpt.yubolun.com/chat)
+
 ## Features
 
 - [x] /tool/[system direction] `/tool/you are a translator`
