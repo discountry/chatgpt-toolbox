@@ -94,7 +94,7 @@ export default function App({
             setIsLoading(false);
             setTimeout(() => {
               genetrateCopyButton();
-            }, 1000);
+            }, 500);
           }
         }
       );

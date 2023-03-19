@@ -90,7 +90,7 @@ const ChatBox = () => {
             setIsLoading(false);
             setTimeout(() => {
               genetrateCopyButton();
-            }, 1000);
+            }, 500);
           }
         }
       );
