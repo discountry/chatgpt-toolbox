@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
+  min-height: -webkit-fill-available;
   overflow: hidden;
 }
 
@@ -42,6 +43,7 @@
   display: flex;
   align-items: center;
   padding: 10px;
+  padding-bottom: env(safe-area-inset-bottom);
   background-color: #f8f9fa !important;
 }
 
