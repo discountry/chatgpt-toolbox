@@ -115,7 +115,7 @@ const ChatBox = () => {
   }, [messages]);
 
   return (
-    <>
+    <div className={styles["container"]}>
       <div className={styles["chat-box"]}>
         <div
           ref={messagesContainerRef}
@@ -154,7 +154,7 @@ const ChatBox = () => {
           Send
         </button>
       </form>
-    </>
+    </div>
   );
 };
 

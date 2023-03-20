@@ -1,3 +1,6 @@
+.container {
+  overflow: hidden;
+}
 .chat-box {
   display: flex;
   flex-direction: column;
