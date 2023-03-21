@@ -27,3 +27,17 @@ pre code.hljs {
   padding: 0 5px;
   font-size: 0.5rem;
 }
+
+table {
+  border-collapse: collapse;
+}
+
+tr {
+  text-align: center;
+  border-bottom: solid 1px black;
+}
+
+td {
+  text-align: center;
+  border: solid 1px black;
+}
