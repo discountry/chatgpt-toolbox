@@ -66,6 +66,32 @@
   border: none;
 }
 
+.button-group {
+  margin-right: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.setting-button {
+  width: 50px;
+  padding: 0 5px;
+  font-size: 0.5rem;
+  border: #494949 solid 1px;
+  border-radius: 5px;
+}
+
+.clear-button {
+  width: 50px;
+  padding: 0 5px;
+  font-size: 0.5rem;
+  background-color: #929292 !important;
+  border: #929292 solid 1px;
+  border-radius: 5px;
+}
+
 .submit-button {
   padding: 10px;
   background-color: #007bff !important;
@@ -78,4 +104,8 @@
 .submit-button:disabled {
   background-color: #494949 !important;
   cursor: not-allowed;
+}
+
+.hidden {
+  display: none;
 }

@@ -23,13 +23,25 @@ const ChatBox = () => {
   const [messages, setMessages] = useState<any[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showSystem, setShowSystem] = useState(false);
+  const [systemPrompt, setSystemPrompt] = useState("");
 
   const messagesContainerRef = useRef<HTMLDivElement>(null);
+
+  const toggleSystem = () => {
+    setShowSystem(!showSystem);
+  };
 
   const handleInputChange = (event: {
     target: { value: SetStateAction<string> };
   }) => {
     setInputValue(event.target.value);
+  };
+
+  const handleSystemPromptChange = (event: {
+    target: { value: SetStateAction<string> };
+  }) => {
+    setSystemPrompt(event.target.value);
   };
 
   const handleFormSubmit = (event: { preventDefault: () => void }) => {
@@ -42,6 +54,10 @@ const ChatBox = () => {
     setInputValue("");
   };
 
+  const clearHistory = () => {
+    setMessages([]);
+  };
+
   const getGPTReply = (question: string) => {
     if (question !== "" && !isLoading) {
       setIsLoading(true);
@@ -49,7 +65,9 @@ const ChatBox = () => {
       const source = createLiveChatCompletion(
         localStorage.getItem("apiKey") as string,
         1024,
-        "You are chatgpt3.5, a chatbot that uses OpenAI's GPT-3 API.",
+        systemPrompt
+          ? systemPrompt
+          : "You are chatgpt3.5, a chatbot that uses OpenAI's GPT-3 API.",
         getLongestArray(messages),
         "chat"
       );
@@ -139,6 +157,31 @@ const ChatBox = () => {
         </div>
       </div>
       <form className={styles["input-container"]} onSubmit={handleFormSubmit}>
+        <div className={styles["button-group"]}>
+          <button
+            type="button"
+            onClick={toggleSystem}
+            className={styles["setting-button"]}
+          >
+            Config
+          </button>
+          <button
+            type="button"
+            onClick={clearHistory}
+            className={styles["clear-button"]}
+          >
+            Clear
+          </button>
+        </div>
+        <input
+          className={`${!showSystem ? styles["hidden"] : undefined} ${
+            styles["chat-input"]
+          }`}
+          type="text"
+          value={systemPrompt}
+          onChange={handleSystemPromptChange}
+          placeholder="System prompt here..."
+        />
         <input
           className={styles["chat-input"]}
           type="text"
