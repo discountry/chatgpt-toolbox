@@ -3,29 +3,12 @@
 @tailwind utilities;
 
 pre {
-  overflow: auto;
   position: relative;
+  border-radius: 0.25rem;
+  margin: 0.5rem 0;
   padding: 1rem;
-  margin-bottom: 10px;
-  background-color: #f7fafc;
-  border-radius: 0.25rem;
-}
-
-.hljs {
-  background: transparent !important;
-}
-
-pre code.hljs {
-  padding: 0;
-}
-
-.copy-button {
-  align-self: end;
-  border: #999 solid 1px;
-  border-radius: 0.25rem;
-  margin: 5px 0;
-  padding: 0 5px;
-  font-size: 0.5rem;
+  color: aliceblue;
+  background: rgb(30, 30, 30);
 }
 
 table {

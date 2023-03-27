@@ -1,0 +1,26 @@
+.copy-button {
+  position: absolute;
+  top: 0;
+  right: 10px;
+  cursor: pointer;
+  margin: 5px;
+  padding: 0px 5px;
+  color: #eee;
+  border: #eee solid 1px;
+  border-radius: 5px;
+  transform: translateX(10px);
+  transition: all ease 0.3s;
+  z-index: 99;
+}
+
+.copy-button:after {
+  content: "copy";
+}
+
+.blink {
+  opacity: 0.5;
+}
+
+.blink:after {
+  content: "copied";
+}

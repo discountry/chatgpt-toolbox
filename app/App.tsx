@@ -1,22 +1,7 @@
 "use client";
-import { genetrateCopyButton } from "@/utils/helper";
 import createLiveChatCompletion from "@/utils/liveGptClient";
-import hljs from "highlight.js";
-import { marked } from "marked";
 import { SetStateAction, useEffect, useRef, useState } from "react";
-
-marked.setOptions({
-  langPrefix: "hljs language-",
-  highlight: function (code: any, lang: string) {
-    return hljs.highlightAuto(code, [
-      "html",
-      "javascript",
-      "python",
-      "rust",
-      "go",
-    ]).value;
-  },
-});
+import Markdown from "./components/Markdown";
 
 export default function App({
   parseHTML = true,
@@ -94,9 +79,6 @@ export default function App({
           if (e.readyState >= 2) {
             tailRef.current = "";
             setIsLoading(false);
-            setTimeout(() => {
-              genetrateCopyButton();
-            }, 500);
           }
         }
       );
@@ -205,12 +187,7 @@ export default function App({
             </span>
             <div className="overflow-auto h-56 xl:h-96 w-full px-5 py-2 font-medium border border-b-4 border-r-4 border-black rounded-lg shadow-lg hover:shadow-sm">
               {parseHTML ? (
-                <div
-                  className="flex flex-col"
-                  dangerouslySetInnerHTML={{
-                    __html: marked.parse(answer + tailRef.current),
-                  }}
-                />
+                <Markdown content={answer} />
               ) : (
                 <div className="flex flex-col">{answer}</div>
               )}

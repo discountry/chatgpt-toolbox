@@ -1,23 +1,9 @@
 "use client";
-import { genetrateCopyButton, getLongestArray } from "@/utils/helper";
+import { getLongestArray } from "@/utils/helper";
 import createLiveChatCompletion from "@/utils/liveGptClient";
-import hljs from "highlight.js";
-import { marked } from "marked";
 import { SetStateAction, useEffect, useRef, useState } from "react";
 import styles from "./ChatBox.module.css";
-
-marked.setOptions({
-  langPrefix: "hljs language-",
-  highlight: function (code: any) {
-    return hljs.highlightAuto(code, [
-      "html",
-      "javascript",
-      "python",
-      "rust",
-      "go",
-    ]).value;
-  },
-});
+import Markdown from "./Markdown";
 
 const ChatBox = () => {
   const [messages, setMessages] = useState<any[]>([]);
@@ -106,9 +92,6 @@ const ChatBox = () => {
         (e: { readyState: number }) => {
           if (e.readyState >= 2) {
             setIsLoading(false);
-            setTimeout(() => {
-              genetrateCopyButton();
-            }, 500);
           }
         }
       );
@@ -146,12 +129,7 @@ const ChatBox = () => {
                 message.role === "user" ? styles["sent"] : styles["received"]
               }`}
             >
-              <div
-                className={styles["message-content"]}
-                dangerouslySetInnerHTML={{
-                  __html: marked.parse(message.content),
-                }}
-              />
+              <Markdown content={message.content} />
             </div>
           ))}
         </div>
