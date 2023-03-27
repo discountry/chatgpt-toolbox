@@ -24,7 +24,7 @@ export function PreCode(props: { children: any }) {
       >
         <button
           className={`${styles["copy-button"]} ${
-            isCopied ? styles["blink"] : undefined
+            isCopied ? styles["blink"] : ""
           }`}
         ></button>
       </CopyToClipboard>
