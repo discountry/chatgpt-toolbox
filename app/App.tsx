@@ -102,7 +102,7 @@ export default function App({
   }, [answer]);
 
   return (
-    <main className="container mx-auto max-w-lg xl:max-w-screen-xl h-screen overflow-hidden px-4">
+    <main className="container mx-auto max-w-lg xl:max-w-screen-xl h-screen max-h-screen overflow-hidden px-4">
       <div className="flex flex-col xl:flex-row xl:flex-wrap h-full pt-6">
         {/* <div className="basis-full h-12">
           <h1 className="text-center text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">
@@ -166,7 +166,7 @@ export default function App({
             </div>
           </div>
         </div>
-        <div className="basis-full xl:basis-1/2 pb-12">
+        <div className="basis-full xl:basis-1/2 max-h-full pb-12">
           <label>
             <span className="text-xs font-semibold inline-block py-1 px-2 my-2 uppercase rounded text-slate-600 bg-slate-200 last:mr-0 mr-1">
               Assistant
