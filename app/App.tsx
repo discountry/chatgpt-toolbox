@@ -102,90 +102,80 @@ export default function App({
   }, [answer]);
 
   return (
-    <main className="container mx-auto max-w-lg xl:max-w-screen-xl px-4 pt-6">
-      <div className="flex flex-col xl:flex-row xl:flex-wrap">
-        <div className="basis-full">
+    <main className="container mx-auto max-w-lg xl:max-w-screen-xl px-4">
+      <div className="flex flex-col xl:flex-row xl:flex-wrap h-screen pt-6">
+        {/* <div className="basis-full h-12">
           <h1 className="text-center text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">
             ChatGPT Toolbox
           </h1>
-        </div>
-        <div className="basis-full xl:basis-1/2 xl:pr-2">
-          <div className="flex flex-row">
+        </div> */}
+        <div className="basis-1/2 px-2">
+          <div className="flex flex-col">
             <div className="basis-full">
               <label>
-                <span className="text-xs font-semibold inline-block py-1 px-2 my-2 uppercase rounded text-teal-600 bg-teal-200 last:mr-0 mr-1">
-                  API_KEY
+                <span className="text-xs font-semibold inline-block py-1 px-2 my-2 uppercase rounded text-red-600 bg-red-200">
+                  System
                 </span>
-                <input
-                  className="resize-none h-8 xl:h-12 w-full px-5 py-2 font-medium border border-b-4 border-r-4 border-black rounded-lg shadow-lg hover:shadow-sm"
-                  name="apiKey"
-                  type="password"
-                  value={apiKey}
-                  onChange={storeApiKey}
+                <textarea
+                  className="resize-none h-12 w-full px-5 py-2 font-medium border border-b-4 border-r-4 border-black rounded-lg shadow-lg hover:shadow-sm"
+                  name="system"
+                  value={direction}
+                  onChange={(e) => setDirection(e.target.value)}
                 />
               </label>
             </div>
-            {/* <div className="basis-1/4 pl-2">
-            <label>
-              <span className="text-xs font-semibold inline-block py-1 px-2 my-2 uppercase rounded text-yellow-600 bg-yellow-200 last:mr-0 mr-1">
-                max_tokens
-              </span>
-              <input
-                className="resize-none h-8 w-full px-5 py-2 font-medium border border-b-4 border-r-4 border-black rounded-lg shadow-lg hover:shadow-sm"
-                name="maxTokens"
-                type="text"
-                value={maxTokens}
-                onChange={(e) => setMaxTokens(e.target.value)}
-              />
-            </label>
-          </div> */}
+            <div className="basis-full">
+              <div className="flex flex-row">
+                <div className="basis-full">
+                  <label>
+                    <span className="text-xs font-semibold inline-block py-1 px-2 my-2 uppercase rounded text-teal-600 bg-teal-200">
+                      API_KEY
+                    </span>
+                    <input
+                      className="resize-none h-8 xl:h-12 w-full px-5 py-2 font-medium border border-b-4 border-r-4 border-black rounded-lg shadow-lg hover:shadow-sm"
+                      name="apiKey"
+                      type="password"
+                      value={apiKey}
+                      onChange={storeApiKey}
+                    />
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div className="basis-full">
+              <label>
+                <span className="text-xs font-semibold inline-block py-1 px-2 my-2 uppercase rounded text-blue-600 bg-blue-200">
+                  User
+                </span>
+                <textarea
+                  className="resize-none h-96 w-full px-5 py-2 font-medium border border-b-4 border-r-4 border-black rounded-lg shadow-lg hover:shadow-sm"
+                  name="user"
+                  value={question}
+                  onChange={(e) => setQuestion(e.target.value)}
+                />
+              </label>
+            </div>
+            <div className="basis-full mt-4">
+              <button
+                disabled={isLoading}
+                className={
+                  isLoading
+                    ? "w-full px-6 py-2 my-2 text-gray-700 border border-b-4 border-r-4 border-gray-500 hover:bg-gray-500 hover:text-gray-100 rounded-lg shadow-lg"
+                    : "w-full px-6 py-2 my-2 text-indigo-700 border border-b-4 border-r-4 border-indigo-500 hover:bg-indigo-500 hover:text-indigo-100 rounded-lg shadow-lg"
+                }
+                onClick={handleSubmitPromptBtnClicked}
+              >
+                {isLoading ? `Loading...` : `Submit`}
+              </button>
+            </div>
           </div>
         </div>
-        <div className="basis-full xl:basis-1/2  xl:pl-2">
-          <label>
-            <span className="text-xs font-semibold inline-block py-1 px-2 my-2 uppercase rounded text-red-600 bg-red-200 last:mr-0 mr-1">
-              System
-            </span>
-            <textarea
-              className="resize-none h-12 w-full px-5 py-2 font-medium border border-b-4 border-r-4 border-black rounded-lg shadow-lg hover:shadow-sm"
-              name="system"
-              value={direction}
-              onChange={(e) => setDirection(e.target.value)}
-            />
-          </label>
-        </div>
-        <div className="basis-full">
-          <label>
-            <span className="text-xs font-semibold inline-block py-1 px-2 my-2 uppercase rounded text-blue-600 bg-blue-200 last:mr-0 mr-1">
-              User
-            </span>
-            <textarea
-              className="resize-none h-56 xl:h-24 w-full px-5 py-2 font-medium border border-b-4 border-r-4 border-black rounded-lg shadow-lg hover:shadow-sm"
-              name="user"
-              value={question}
-              onChange={(e) => setQuestion(e.target.value)}
-            />
-          </label>
-        </div>
-        <div className="basis-full">
-          <button
-            disabled={isLoading}
-            className={
-              isLoading
-                ? "w-full px-6 py-2 my-2 text-gray-700 border border-b-4 border-r-4 border-gray-500 hover:bg-gray-500 hover:text-gray-100 rounded-lg shadow-lg"
-                : "w-full px-6 py-2 my-2 text-indigo-700 border border-b-4 border-r-4 border-indigo-500 hover:bg-indigo-500 hover:text-indigo-100 rounded-lg shadow-lg"
-            }
-            onClick={handleSubmitPromptBtnClicked}
-          >
-            {isLoading ? `Loading...` : `Submit`}
-          </button>
-        </div>
-        <div className="basis-full">
+        <div className="basis-1/2">
           <label>
             <span className="text-xs font-semibold inline-block py-1 px-2 my-2 uppercase rounded text-slate-600 bg-slate-200 last:mr-0 mr-1">
               Assistant
             </span>
-            <div className="overflow-auto h-56 xl:h-96 w-full px-5 py-2 font-medium border border-b-4 border-r-4 border-black rounded-lg shadow-lg hover:shadow-sm">
+            <div className="overflow-auto h-4/5 w-full px-5 py-2 font-medium border border-b-4 border-r-4 border-black rounded-lg shadow-lg hover:shadow-sm">
               {parseHTML ? (
                 <Markdown content={answer} />
               ) : (
