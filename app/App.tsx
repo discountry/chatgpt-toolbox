@@ -105,13 +105,13 @@ export default function App({
 
   return (
     <main className="container mx-auto max-w-lg xl:max-w-screen-xl h-screen max-h-screen overflow-hidden px-4">
-      <div className="flex flex-col xl:flex-row xl:flex-wrap h-full pt-6">
+      <div className="grid h-full gap-2 xl:grid-cols-2">
         {/* <div className="basis-full h-12">
           <h1 className="text-center text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">
             ChatGPT Toolbox
           </h1>
         </div> */}
-        <div className="basis-1/3 xl:basis-1/2 px-2">
+        <div className="w-full">
           <div className="flex h-full flex-col">
             <div className="flex-none">
               <label>
@@ -119,7 +119,7 @@ export default function App({
                   API_KEY
                 </span>
                 <input
-                  className="resize-none h-8 md:h-12 w-full px-5 py-2 font-medium border border-b-4 border-r-4 border-black rounded-lg shadow-lg hover:shadow-sm"
+                  className="resize-none h-8 xl:h-12 w-full px-5 py-2 font-medium border border-b-4 border-r-4 border-black rounded-lg shadow-lg hover:shadow-sm"
                   name="apiKey"
                   type="password"
                   value={apiKey}
@@ -133,7 +133,7 @@ export default function App({
                   System
                 </span>
                 <input
-                  className="resize-none h-8 md:h-12 w-full px-5 py-2 font-medium border border-b-4 border-r-4 border-black rounded-lg shadow-lg hover:shadow-sm"
+                  className="resize-none h-8 xl:h-12 w-full px-5 py-2 font-medium border border-b-4 border-r-4 border-black rounded-lg shadow-lg hover:shadow-sm"
                   name="system"
                   value={direction}
                   onChange={(e) => setDirection(e.target.value)}
@@ -168,7 +168,7 @@ export default function App({
             </div>
           </div>
         </div>
-        <div className="basis-full xl:basis-1/2 h-1/2 xl:h-full xl:w-1/2 pb-12">
+        <div className="w-full max-h-96 xl:max-h-screen xl:h-screen pb-12">
           <label>
             <span className="text-xs font-semibold inline-block py-1 px-2 my-2 uppercase rounded text-slate-600 bg-slate-200 last:mr-0 mr-1">
               Assistant
