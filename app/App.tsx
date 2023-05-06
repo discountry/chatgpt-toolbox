@@ -13,7 +13,9 @@ export default function App({
   const [apiKey, setApiKey] = useState("");
   const [maxTokens, setMaxTokens] = useState("2048");
   const [direction, setDirection] = useState(
-    defaultDirection ? defaultDirection : "You are gpt 3.5"
+    defaultDirection
+      ? defaultDirection
+      : `Today is ${new Date().toDateString()}.You are a helpful assistant.`
   );
   const [question, setQuestion] = useState("Hello, I am a human.");
   const [answer, setAnswer] = useState("...");
