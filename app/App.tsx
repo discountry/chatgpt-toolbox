@@ -166,7 +166,7 @@ export default function App({
             </div>
           </div>
         </div>
-        <div className="basis-full xl:basis-1/2 max-h-full pb-12">
+        <div className="basis-full xl:basis-1/2 max-h-full xl:w-1/2 pb-12">
           <label>
             <span className="text-xs font-semibold inline-block py-1 px-2 my-2 uppercase rounded text-slate-600 bg-slate-200 last:mr-0 mr-1">
               Assistant
