@@ -17,7 +17,7 @@ export function PreCode(props: { children: any }) {
   };
 
   return (
-    <pre ref={ref}>
+    <pre ref={ref} style={{ overflowX: "auto" }}>
       <CopyToClipboard
         text={ref.current ? ref.current.innerText : ""}
         onCopy={toggleCopied}
