@@ -17,7 +17,7 @@ export function PreCode(props: { children: any }) {
   };
 
   return (
-    <pre ref={ref} style={{ overflowX: "auto" }}>
+    <pre ref={ref}>
       <CopyToClipboard
         text={ref.current ? ref.current.innerText : ""}
         onCopy={toggleCopied}
@@ -28,7 +28,7 @@ export function PreCode(props: { children: any }) {
           }`}
         ></button>
       </CopyToClipboard>
-      {props.children}
+      <div className="overflow-x-auto">{props.children}</div>
     </pre>
   );
 }
