@@ -119,7 +119,7 @@ export default function App({
                   API_KEY
                 </span>
                 <input
-                  className="resize-none h-8 xl:h-12 w-full px-5 py-2 font-medium border border-b-4 border-r-4 border-black rounded-lg shadow-lg hover:shadow-sm"
+                  className="resize-none h-8 xl:h-12 w-full px-5 py-2 font-medium border border-b-4 border-r-4 border-black rounded-lg shadow-lg hover:shadow-sm bg-slate-200"
                   name="apiKey"
                   type="password"
                   value={apiKey}
@@ -133,7 +133,7 @@ export default function App({
                   System
                 </span>
                 <input
-                  className="resize-none h-8 xl:h-12 w-full px-5 py-2 font-medium border border-b-4 border-r-4 border-black rounded-lg shadow-lg hover:shadow-sm"
+                  className="resize-none h-8 xl:h-12 w-full px-5 py-2 font-medium border border-b-4 border-r-4 border-black rounded-lg shadow-lg hover:shadow-sm bg-slate-200"
                   name="system"
                   value={direction}
                   onChange={(e) => setDirection(e.target.value)}
@@ -146,7 +146,7 @@ export default function App({
                   User
                 </span>
                 <textarea
-                  className="resize-none h-full w-full px-5 py-2 font-medium border border-b-4 border-r-4 border-black rounded-lg shadow-lg hover:shadow-sm"
+                  className="resize-none h-full w-full px-5 py-2 font-medium border border-b-4 border-r-4 border-black rounded-lg shadow-lg hover:shadow-sm bg-slate-200"
                   name="user"
                   value={question}
                   onChange={(e) => setQuestion(e.target.value)}
