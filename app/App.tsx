@@ -104,22 +104,22 @@ export default function App({
   }, [answer]);
 
   return (
-    <main className="container mx-auto max-w-lg xl:max-w-screen-xl h-screen max-h-screen overflow-hidden px-4">
+    <main className="container h-screen max-w-lg max-h-screen px-4 mx-auto overflow-hidden xl:max-w-screen-xl">
       <div className="grid h-full gap-2 xl:grid-cols-2">
-        {/* <div className="basis-full h-12">
-          <h1 className="text-center text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">
+        {/* <div className="h-12 basis-full">
+          <h1 className="text-4xl font-extrabold text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">
             ChatGPT Toolbox
           </h1>
         </div> */}
         <div className="w-full">
-          <div className="flex h-full flex-col">
+          <div className="flex flex-col h-full">
             <div className="flex-none">
               <label>
-                <span className="text-xs font-semibold inline-block py-1 px-2 my-2 uppercase rounded text-teal-600 bg-teal-200">
+                <span className="inline-block px-2 py-1 my-2 text-xs font-semibold text-teal-600 uppercase bg-teal-200 rounded">
                   API_KEY
                 </span>
                 <input
-                  className="resize-none h-8 xl:h-12 w-full px-5 py-2 font-medium border border-b-4 border-r-4 border-black rounded-lg shadow-lg hover:shadow-sm bg-slate-200"
+                  className="w-full h-8 px-5 py-2 font-medium text-white rounded-lg resize-none bg-sky-800 xl:h-12 hover:shadow-sm"
                   name="apiKey"
                   type="password"
                   value={apiKey}
@@ -129,24 +129,24 @@ export default function App({
             </div>
             <div className="flex-none">
               <label>
-                <span className="text-xs font-semibold inline-block py-1 px-2 my-2 uppercase rounded text-red-600 bg-red-200">
+                <span className="inline-block px-2 py-1 my-2 text-xs font-semibold text-red-600 uppercase bg-red-200 rounded">
                   System
                 </span>
                 <input
-                  className="resize-none h-8 xl:h-12 w-full px-5 py-2 font-medium border border-b-4 border-r-4 border-black rounded-lg shadow-lg hover:shadow-sm bg-slate-200"
+                  className="w-full h-8 px-5 py-2 font-medium text-white bg-pink-800 rounded-lg shadow-lg resize-none xl:h-12 hover:shadow-sm"
                   name="system"
                   value={direction}
                   onChange={(e) => setDirection(e.target.value)}
                 />
               </label>
             </div>
-            <div className="grow pb-12">
+            <div className="pb-12 grow">
               <label>
-                <span className="text-xs font-semibold inline-block py-1 px-2 my-2 uppercase rounded text-blue-600 bg-blue-200">
+                <span className="inline-block px-2 py-1 my-2 text-xs font-semibold text-blue-600 uppercase bg-blue-200 rounded">
                   User
                 </span>
                 <textarea
-                  className="resize-none h-full w-full px-5 py-2 font-medium border border-b-4 border-r-4 border-black rounded-lg shadow-lg hover:shadow-sm bg-slate-200"
+                  className="w-full h-full px-5 py-2 font-medium text-white bg-indigo-800 rounded-lg shadow-lg resize-none hover:shadow-sm"
                   name="user"
                   value={question}
                   onChange={(e) => setQuestion(e.target.value)}
@@ -158,8 +158,8 @@ export default function App({
                 disabled={isLoading}
                 className={
                   isLoading
-                    ? "h-12 w-full px-6 py-2 my-2 text-gray-700 border border-b-4 border-r-4 border-gray-500 hover:bg-gray-500 hover:text-gray-100 rounded-lg shadow-lg"
-                    : "h-12 w-full px-6 py-2 my-2 text-indigo-700 border border-b-4 border-r-4 border-indigo-500 hover:bg-indigo-500 hover:text-indigo-100 rounded-lg shadow-lg"
+                    ? "h-12 w-full px-6 py-2 my-2 text-gray-100 hover:bg-gray-500 bg-gray-500 rounded-lg shadow-lg"
+                    : "h-12 w-full px-6 py-2 my-2 text-violet-100 bg-violet-800 hover:bg-violet-600 rounded-lg shadow-lg"
                 }
                 onClick={handleSubmitPromptBtnClicked}
               >
@@ -168,12 +168,12 @@ export default function App({
             </div>
           </div>
         </div>
-        <div className="w-full max-h-96 xl:max-h-screen xl:h-screen pb-12">
+        <div className="w-full pb-12 max-h-96 xl:max-h-screen xl:h-screen">
           <label>
-            <span className="text-xs font-semibold inline-block py-1 px-2 my-2 uppercase rounded text-slate-600 bg-slate-200 last:mr-0 mr-1">
+            <span className="inline-block px-2 py-1 my-2 mr-1 text-xs font-semibold text-purple-600 uppercase bg-purple-200 rounded last:mr-0">
               Assistant
             </span>
-            <div className="overflow-x-hidden overflow-y-auto h-full w-full px-5 py-2 font-medium bg-slate-100 border border-b-4 border-r-4 border-black rounded-lg shadow-lg hover:shadow-sm">
+            <div className="w-full h-full px-5 py-2 overflow-x-hidden overflow-y-auto font-medium text-white bg-green-800 rounded-lg shadow-lg hover:shadow-sm">
               {parseHTML ? (
                 <Markdown content={answer} />
               ) : (
