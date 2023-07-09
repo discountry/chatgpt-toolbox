@@ -119,7 +119,7 @@ export default function App({
                   API_KEY
                 </span>
                 <input
-                  className="w-full h-8 px-5 py-2 font-medium text-white bg-transparent border border-teal-800 rounded-lg resize-none xl:h-12 hover:shadow-sm"
+                  className="w-full h-8 px-5 py-2 font-medium text-white bg-transparent border border-white rounded-lg resize-none xl:h-12 hover:shadow-sm"
                   name="apiKey"
                   type="password"
                   value={apiKey}
@@ -133,7 +133,7 @@ export default function App({
                   System
                 </span>
                 <input
-                  className="w-full h-8 px-5 py-2 font-medium text-white bg-transparent border border-red-800 rounded-lg shadow-lg resize-none xl:h-12 hover:shadow-sm"
+                  className="w-full h-8 px-5 py-2 font-medium text-white bg-transparent border border-white rounded-lg shadow-lg resize-none xl:h-12 hover:shadow-sm"
                   name="system"
                   value={direction}
                   onChange={(e) => setDirection(e.target.value)}
@@ -146,7 +146,7 @@ export default function App({
                   User
                 </span>
                 <textarea
-                  className="w-full h-full px-5 py-2 font-medium text-white bg-transparent border border-blue-800 rounded-lg shadow-lg resize-none hover:shadow-sm"
+                  className="w-full h-full px-5 py-2 font-medium text-white bg-transparent border border-white rounded-lg shadow-lg resize-none hover:shadow-sm"
                   name="user"
                   value={question}
                   onChange={(e) => setQuestion(e.target.value)}
@@ -159,7 +159,7 @@ export default function App({
                 className={
                   isLoading
                     ? "h-12 w-full px-6 py-2 my-2 text-gray-100 hover:bg-gray-500 bg-gray-500 rounded-lg shadow-lg"
-                    : "h-12 w-full px-6 py-2 my-2 text-violet-100 border border-violet-800 hover:bg-violet-600 rounded-lg shadow-lg"
+                    : "h-12 w-full px-6 py-2 my-2 text-violet-100 border border-white hover:bg-slate-600 rounded-lg shadow-lg"
                 }
                 onClick={handleSubmitPromptBtnClicked}
               >
@@ -173,7 +173,7 @@ export default function App({
             <span className="inline-block px-2 py-1 my-2 mr-1 text-xs font-semibold text-green-600 uppercase bg-green-200 rounded last:mr-0">
               Assistant
             </span>
-            <div className="w-full h-full px-5 py-2 overflow-x-hidden overflow-y-auto font-medium text-white border border-green-800 rounded-lg shadow-lg hover:shadow-sm">
+            <div className="w-full h-full px-5 py-2 overflow-x-hidden overflow-y-auto font-medium text-white border border-white rounded-lg shadow-lg hover:shadow-sm">
               {parseHTML ? (
                 <Markdown content={answer} />
               ) : (
