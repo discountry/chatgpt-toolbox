@@ -53,7 +53,7 @@ const ChatBox = () => {
         1024,
         systemPrompt
           ? systemPrompt
-          : "You are chatgpt3.5, a chatbot that uses OpenAI's GPT-3 API.",
+          : "You are a helpful assistant.",
         getLongestArray(messages),
         "chat"
       );

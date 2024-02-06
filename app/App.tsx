@@ -31,6 +31,10 @@ export default function App({
     localStorage.setItem("apiKey", String(e.target.value));
   };
 
+  const handleRoleChange = (direction: string) => {
+    setDirection(direction);
+  };
+
   const handleSubmitPromptBtnClicked = () => {
     if (question !== "" && !isLoading) {
       setIsLoading(true);
@@ -139,6 +143,50 @@ export default function App({
                   onChange={(e) => setDirection(e.target.value)}
                 />
               </label>
+            </div>
+            <div className="flex-none">
+              <div className="flex gap-2 my-2">
+                <button
+                  className="h-8 w-full text-violet-100 border border-white hover:bg-slate-600 rounded-lg shadow-lg"
+                  onClick={() =>
+                    handleRoleChange(
+                      "Translate any message you received to professional English."
+                    )
+                  }
+                >
+                  Translator
+                </button>
+                <button
+                  className="h-8 w-full text-violet-100 border border-white hover:bg-slate-600 rounded-lg shadow-lg"
+                  onClick={() =>
+                    handleRoleChange(
+                      "Your are a professional programmer. Answer the question with code example if necessary."
+                    )
+                  }
+                >
+                  Programmer
+                </button>
+                <button
+                  className="h-8 w-full text-violet-100 border border-white hover:bg-slate-600 rounded-lg shadow-lg"
+                  onClick={() =>
+                    handleRoleChange(
+                      "Transcript the message into a professional email."
+                    )
+                  }
+                >
+                  Email
+                </button>
+                <button
+                  className="h-8 w-full text-violet-100 border border-white hover:bg-slate-600 rounded-lg shadow-lg"
+                  onClick={() =>
+                    handleRoleChange(
+                      "Transcript the message into a tweet from top influencer."
+                    )
+                  }
+                >
+                  Tweet
+                </button>
+              </div>
             </div>
             <div className="pb-12 grow">
               <label>
