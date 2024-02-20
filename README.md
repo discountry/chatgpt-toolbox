@@ -6,9 +6,13 @@ I'm using chatGPT itself to write this application. For example, 90% of the code
 
 ## What's the difference?
 
-What's the difference between Toolbox to other chatgpt UI?
+What is the difference between Toolbox and other ChatGPT UIs?
 
-ChatGPT Toolbox does not has any backend service. You'll use your own api-key to call from your browser to openai service directly.
+ChatGPT Toolbox does not have any backend service. 
+
+You will use your own API key to directly call OpenAI's service from your browser.
+
+You can create any tool by appending the prompt to the URL and sharing it with anyone.
 
 ## Pages
 
