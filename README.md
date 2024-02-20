@@ -4,6 +4,12 @@ User-Friendly Web Interface for ChatGPT.
 
 I'm using chatGPT itself to write this application. For example, 90% of the code on the `/chat` page was written by chatGPT.
 
+## What's the difference?
+
+What's the difference between Toolbox to other chatgpt UI?
+
+ChatGPT Toolbox does not has any backend service. You'll use your own api-key to call from your browser to openai service directly.
+
 ## Pages
 
 * [index](https://chatgpt.yubolun.com/) Using chatGPT as a tool.
