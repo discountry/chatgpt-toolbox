@@ -1,5 +1,7 @@
 import { MAX_TOKENS, OPENAI_MODEL, OPENAI_URL } from "./config";
 
+const endPoint = process.env.NEXT_PUBLIC_OPENAI_URL ? process.env.NEXT_PUBLIC_OPENAI_URL : OPENAI_URL;
+
 export default async function createChatCompletion(
   apiKey: string,
   maxTokens: number,
@@ -17,7 +19,7 @@ export default async function createChatCompletion(
     max_tokens: maxTokens ? maxTokens : MAX_TOKENS,
   });
 
-  const response = await fetch(OPENAI_URL, {
+  const response = await fetch(endPoint, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${apiKey ? apiKey : process.env.OPENAI_API_KEY}`,

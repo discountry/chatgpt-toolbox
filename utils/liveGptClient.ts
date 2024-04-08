@@ -1,6 +1,8 @@
 import { SSE } from "sse";
 import { MAX_TOKENS, OPENAI_MODEL, OPENAI_URL } from "./config";
 
+const endPoint = process.env.NEXT_PUBLIC_OPENAI_URL ? process.env.NEXT_PUBLIC_OPENAI_URL : OPENAI_URL;
+
 export default function createLiveChatCompletion(
   apiKey: string,
   maxTokens: number,
@@ -24,7 +26,7 @@ export default function createLiveChatCompletion(
     stream: true,
   };
 
-  const source = new SSE(OPENAI_URL, {
+  const source = new SSE(endPoint, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${apiKey ? apiKey : process.env.OPENAI_API_KEY}`,
