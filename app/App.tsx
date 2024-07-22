@@ -144,7 +144,7 @@ export default function App({
                       Model
                     </span>
                     <select
-                      className="w-full h-8 px-5 py-2 font-medium text-white bg-transparent border border-white rounded-lg shadow-lg xl:h-12 hover:shadow-sm"
+                      className="w-full h-8 px-5 py-2 font-medium text-white bg-transparent border border-white rounded-lg shadow-lg xl:h-12 hover:shadow-sm text-sm"
                       value={model}
                       onChange={storeModel}
                     >
