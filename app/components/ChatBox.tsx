@@ -1,6 +1,6 @@
 "use client";
 import { getLongestArray } from "@/utils/helper";
-import createLiveChatCompletion from "@/utils/liveGptClient";
+import createLiveChatCompletion, { LLMType } from "@/utils/liveGptClient";
 import { SetStateAction, useEffect, useRef, useState } from "react";
 import styles from "./ChatBox.module.css";
 import Markdown from "./Markdown";
@@ -49,6 +49,7 @@ const ChatBox = () => {
       setIsLoading(true);
 
       const source = createLiveChatCompletion(
+        localStorage.getItem("model") as LLMType,
         localStorage.getItem("apiKey") as string,
         1024,
         systemPrompt

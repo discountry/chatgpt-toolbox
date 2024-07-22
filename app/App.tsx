@@ -1,21 +1,21 @@
 "use client";
-import createLiveChatCompletion from "@/utils/liveGptClient";
+import createLiveChatCompletion, { LLMType } from "@/utils/liveGptClient";
 import { SetStateAction, useEffect, useRef, useState } from "react";
 import Markdown from "./components/Markdown";
 
 export default function App({
   parseHTML = true,
   defaultDirection,
-}: {
+}: Readonly<{
   parseHTML?: boolean;
   defaultDirection?: string;
-}) {
+}>) {
+  const [model, setModel] = useState("gpt-3.5-turbo");
   const [apiKey, setApiKey] = useState("");
   const [maxTokens, setMaxTokens] = useState("2048");
   const [direction, setDirection] = useState(
-    defaultDirection
-      ? defaultDirection
-      : `Today is ${new Date().toDateString()}.You are a helpful assistant.`
+    defaultDirection ||
+      `Today is ${new Date().toDateString()}.You are a helpful assistant.`
   );
   const [question, setQuestion] = useState("Hello, I am a human.");
   const [answer, setAnswer] = useState("...");
@@ -25,6 +25,11 @@ export default function App({
   const resultRef = useRef("");
 
   const tailRef = useRef("");
+
+  const storeModel = (e: { target: { value: SetStateAction<string> } }) => {
+    setModel(e.target.value);
+    localStorage.setItem("model", String(e.target.value));
+  };
 
   const storeApiKey = (e: { target: { value: SetStateAction<string> } }) => {
     setApiKey(e.target.value);
@@ -41,6 +46,7 @@ export default function App({
       setAnswer("");
 
       const source = createLiveChatCompletion(
+        model as LLMType,
         apiKey,
         Number(maxTokens),
         direction,
@@ -101,6 +107,10 @@ export default function App({
     if (localKey) {
       setApiKey(localKey);
     }
+    const localModel = localStorage.getItem("model");
+    if (localModel) {
+      setModel(localModel);
+    }
   }, []);
 
   useEffect(() => {
@@ -110,26 +120,42 @@ export default function App({
   return (
     <main className="container h-screen max-w-lg max-h-screen px-4 mx-auto overflow-hidden xl:max-w-screen-xl">
       <div className="grid h-full gap-2 xl:grid-cols-2">
-        {/* <div className="h-12 basis-full">
-          <h1 className="text-4xl font-extrabold text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">
-            ChatGPT Toolbox
-          </h1>
-        </div> */}
         <div className="w-full">
           <div className="flex flex-col h-full">
             <div className="flex-none">
-              <label>
-                <span className="inline-block px-2 py-1 my-2 text-xs font-semibold text-teal-600 uppercase bg-teal-200 rounded">
-                  API_KEY
-                </span>
-                <input
-                  className="w-full h-8 px-5 py-2 font-medium text-white bg-transparent border border-white rounded-lg resize-none xl:h-12 hover:shadow-sm"
-                  name="apiKey"
-                  type="password"
-                  value={apiKey}
-                  onChange={storeApiKey}
-                />
-              </label>
+              <div className="flex gap-1">
+                <div className="basis-3/4">
+                  <label>
+                    <span className="inline-block px-2 py-1 my-2 text-xs font-semibold text-teal-600 uppercase bg-teal-200 rounded">
+                      API_KEY
+                    </span>
+                    <input
+                      className="w-full h-8 px-5 py-2 font-medium text-white bg-transparent border border-white rounded-lg resize-none xl:h-12 hover:shadow-sm"
+                      name="apiKey"
+                      type="password"
+                      value={apiKey}
+                      onChange={storeApiKey}
+                    />
+                  </label>
+                </div>
+                <div className="basis-1/4">
+                  <label>
+                    <span className="inline-block px-2 py-1 my-2 text-xs font-semibold text-teal-600 uppercase bg-teal-200 rounded">
+                      Model
+                    </span>
+                    <select
+                      className="w-full h-8 px-5 py-2 font-medium text-white bg-transparent border border-white rounded-lg shadow-lg xl:h-12 hover:shadow-sm"
+                      value={model}
+                      onChange={storeModel}
+                    >
+                      <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                      <option value="claude-3-haiku">Claude-3 Haiku</option>
+                      <option value="llama-3-70b">Llama-3 70B</option>
+                      <option value="mixtral-8x7b">Mixtral-8x7B</option>
+                    </select>
+                  </label>
+                </div>
+              </div>
             </div>
             <div className="flex-none">
               <label>
