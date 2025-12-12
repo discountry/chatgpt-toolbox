@@ -1,11 +1,25 @@
 "use client";
+import type { ComponentType, ReactNode } from "react";
 import { useRef, useState } from "react";
 import CopyToClipboard from "react-copy-to-clipboard";
 import ReactMarkdown from "react-markdown";
 import CodeBlock from "./CodeBlock";
 import styles from "./Markdown.module.css";
 
-export function PreCode(props: { children: any }) {
+type ClipboardProps = {
+  text: string;
+  onCopy?: (text: string, result: boolean) => void;
+  options?: {
+    debug?: boolean;
+    message?: string;
+    format?: string;
+  };
+  children?: ReactNode;
+};
+
+const Clipboard = CopyToClipboard as unknown as ComponentType<ClipboardProps>;
+
+export function PreCode(props: { children: ReactNode }) {
   const ref = useRef<HTMLPreElement>(null);
   const [isCopied, setIsCopied] = useState(false);
 
@@ -18,7 +32,7 @@ export function PreCode(props: { children: any }) {
 
   return (
     <pre ref={ref}>
-      <CopyToClipboard
+      <Clipboard
         text={ref.current ? ref.current.innerText : ""}
         onCopy={toggleCopied}
       >
@@ -27,7 +41,7 @@ export function PreCode(props: { children: any }) {
             isCopied ? styles["blink"] : ""
           }`}
         ></button>
-      </CopyToClipboard>
+      </Clipboard>
       <div className="overflow-x-auto">{props.children}</div>
     </pre>
   );
