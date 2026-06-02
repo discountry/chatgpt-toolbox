@@ -63,6 +63,7 @@ export class SSE {
   }
 
   private setReadyState(state: number): void {
+    if (this._readyState === state) return;
     this._readyState = state;
     this.emit("readystatechange", { readyState: state });
   }
