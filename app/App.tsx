@@ -1,8 +1,10 @@
 "use client";
 import createLiveChatCompletion, { LLMType } from "@/utils/liveGptClient";
-import { SetStateAction, useEffect, useRef, useState } from "react";
+import { SetStateAction, useCallback, useEffect, useRef, useState } from "react";
+import "./aether.css";
 import Markdown from "./components/Markdown";
 
+/* ---- Role presets (unchanged from original) ---- */
 const ROLE_PRESETS = [
   {
     label: "Translator",
@@ -23,6 +25,133 @@ const ROLE_PRESETS = [
   },
 ];
 
+/* ============================================================
+   Decorative sub-components (AETHER-1 terminal chrome)
+   ============================================================ */
+
+function Screws() {
+  return (
+    <>
+      <span className="screw tl" />
+      <span className="screw tr" />
+      <span className="screw bl" />
+      <span className="screw br" />
+    </>
+  );
+}
+
+function Led({
+  on,
+  color = "amber",
+  breathe,
+  fast,
+}: {
+  on?: boolean;
+  color?: string;
+  breathe?: boolean;
+  fast?: boolean;
+}) {
+  const cls = ["led", on && "on", on && color, breathe && "breathe", fast && "fast"]
+    .filter(Boolean)
+    .join(" ");
+  return <span className={cls} />;
+}
+
+function Indic({
+  on,
+  color,
+  label,
+  status,
+}: {
+  on?: boolean;
+  color?: string;
+  label: string;
+  status?: string;
+}) {
+  return (
+    <span className="indic">
+      <Led on={on} color={color} breathe={status === "live"} fast={status === "busy"} />
+      <span className={`lbl ${status || ""}`}>{label}</span>
+    </span>
+  );
+}
+
+function Vu({ running }: { running: boolean }) {
+  return (
+    <span className={`vu${running ? " run" : ""}`}>
+      <i />
+      <i />
+      <i />
+      <i />
+      <i />
+      <i />
+    </span>
+  );
+}
+
+function Grille() {
+  return (
+    <span className="grille">
+      {Array.from({ length: 21 }).map((_, i) => (
+        <i key={i} />
+      ))}
+    </span>
+  );
+}
+
+function Knob({
+  models,
+  index,
+  onCycle,
+}: {
+  models: string[];
+  index: number;
+  onCycle: () => void;
+}) {
+  const n = models.length;
+  const arc = 270;
+  const start = -135;
+  const rot = n > 1 ? start + (arc / (n - 1)) * index : 0;
+
+  return (
+    <div className="knob-unit">
+      <div className="knob-dial">
+        <div className="knob-ring">
+          {models.map((_, i) => {
+            const a = n > 1 ? start + (arc / (n - 1)) * i : 0;
+            return (
+              <span
+                key={i}
+                className={`knob-tick${i === index ? " active" : ""}`}
+                style={{ transform: `translate(-50%,-50%) rotate(${a}deg)` }}
+              />
+            );
+          })}
+        </div>
+        <button
+          className="knob"
+          style={{
+            transform: `rotate(${rot}deg)`,
+            "--rot": `${rot}deg`,
+          } as React.CSSProperties}
+          onClick={onCycle}
+          aria-label="Cycle model"
+        >
+          <span className="pointer" />
+        </button>
+      </div>
+      <div className="knob-screen">{models[index]}</div>
+      <div className="knob-cap">Model · Turn to Set</div>
+    </div>
+  );
+}
+
+/* ============================================================
+   Main App — all original logic preserved
+   ============================================================ */
+
+const MODEL_LABELS = ["GPT-3.5"];
+
 export default function App({
   parseHTML = true,
   defaultDirection,
@@ -31,200 +160,327 @@ export default function App({
   defaultDirection?: string;
 }>) {
   const model: LLMType = "gpt-3.5-turbo";
+
   const [apiKey, setApiKey] = useState("");
-  const [maxTokens, setMaxTokens] = useState("2048");
+  const [modelIdx, setModelIdx] = useState(0);
   const [direction, setDirection] = useState(
     defaultDirection ||
-      `Today is ${new Date().toDateString()}.You are a helpful assistant.`
+      `Today is ${new Date().toDateString()}. You are a helpful assistant.`
   );
+  const [activePreset, setActivePreset] = useState<string | null>(null);
   const [question, setQuestion] = useState("Hello, I am a human.");
-  const [answer, setAnswer] = useState("...");
-
   const [isLoading, setIsLoading] = useState(false);
+  const [status, setStatus] = useState<"idle" | "processing" | "streaming">("idle");
+  const [booting, setBooting] = useState(true);
+
+  /* Message feed (displayed in CRT screen) */
+  const [feed, setFeed] = useState<
+    Array<{ who: string; text: string; role: string }>
+  >([]);
+  /* Currently streaming answer */
+  const [streamText, setStreamText] = useState("");
 
   const resultRef = useRef("");
-
   const tailRef = useRef("");
+  const feedRef = useRef<HTMLDivElement>(null);
+
+  /* Boot flicker on mount */
+  useEffect(() => {
+    const t = setTimeout(() => setBooting(false), 1100);
+    return () => clearTimeout(t);
+  }, []);
+
+  /* Restore API key from localStorage */
+  useEffect(() => {
+    const localKey = localStorage.getItem("apiKey");
+    if (localKey) setApiKey(localKey);
+    localStorage.setItem("model", model);
+  }, []);
+
+  /* Auto-scroll feed on new content */
+  useEffect(() => {
+    const el = feedRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
+  }, [feed, streamText]);
 
   const storeApiKey = (e: { target: { value: SetStateAction<string> } }) => {
     setApiKey(e.target.value);
     localStorage.setItem("apiKey", String(e.target.value));
   };
 
-  const handleRoleChange = (direction: string) => {
-    setDirection(direction);
+  const pickPreset = (preset: (typeof ROLE_PRESETS)[number]) => {
+    if (activePreset === preset.label) {
+      setActivePreset(null);
+      setDirection(
+        `Today is ${new Date().toDateString()}. You are a helpful assistant.`
+      );
+    } else {
+      setActivePreset(preset.label);
+      setDirection(preset.direction);
+    }
   };
 
-  const handleSubmitPromptBtnClicked = () => {
-    if (question !== "" && !isLoading) {
-      setIsLoading(true);
-      setAnswer("");
-      resultRef.current = "";
+  const cycleModel = () => setModelIdx((i) => (i + 1) % MODEL_LABELS.length);
 
-      const source = createLiveChatCompletion(
-        model,
-        apiKey,
-        Number(maxTokens),
-        direction,
-        question
-      );
+  /* ---- Submit: SSE streaming (original logic) ---- */
+  const handleSubmit = useCallback(() => {
+    if (question.trim() === "" || isLoading) {
+      if (question.trim() === "") alert("Please insert a prompt!");
+      return;
+    }
 
-      source.addEventListener("message", (e: { data: string }) => {
-        if (e.data != "[DONE]") {
-          const payload = JSON.parse(e.data);
-          if (
-            Object.prototype.hasOwnProperty.call(
-              payload.choices[0].delta,
-              "content"
-            )
-          ) {
-            const text = payload.choices[0].delta.content;
+    setIsLoading(true);
+    setStatus("processing");
+    setFeed((f) => [...f, { who: "USER", text: question, role: "user" }]);
+    setStreamText("");
+    resultRef.current = "";
 
-            if (text.includes("```")) {
-              if (tailRef.current === "") {
-                tailRef.current = "\n```";
-              } else {
-                tailRef.current = "";
-              }
-            }
+    const source = createLiveChatCompletion(
+      model,
+      apiKey,
+      2048,
+      direction,
+      question
+    );
 
-            if (text === "`") {
+    source.addEventListener("message", (e: { data: string }) => {
+      if (e.data !== "[DONE]") {
+        const payload = JSON.parse(e.data);
+        if (
+          Object.prototype.hasOwnProperty.call(
+            payload.choices[0].delta,
+            "content"
+          )
+        ) {
+          setStatus("streaming");
+          const text = payload.choices[0].delta.content;
+
+          if (text.includes("```")) {
+            if (tailRef.current === "") {
+              tailRef.current = "\n```";
+            } else {
               tailRef.current = "";
             }
-
-            resultRef.current = resultRef.current + text;
-
-            setAnswer(resultRef.current);
           }
-        } else {
-          source.close();
-        }
-      });
-
-      source.addEventListener(
-        "readystatechange",
-        (e: { readyState: number }) => {
-          if (e.readyState >= 2) {
+          if (text === "`") {
             tailRef.current = "";
-            setIsLoading(false);
           }
-        }
-      );
 
-      source.stream();
-    } else {
-      alert("Please insert a prompt!");
-    }
+          resultRef.current = resultRef.current + text;
+          setStreamText(resultRef.current);
+        }
+      } else {
+        source.close();
+      }
+    });
+
+    source.addEventListener(
+      "readystatechange",
+      (e: { readyState: number }) => {
+        if (e.readyState >= 2) {
+          tailRef.current = "";
+          setIsLoading(false);
+          setStatus("idle");
+          /* Finalize: push completed answer into feed */
+          if (resultRef.current) {
+            setFeed((f) => [
+              ...f,
+              { who: "ASSISTANT", text: resultRef.current, role: "asst" },
+            ]);
+          }
+          setStreamText("");
+        }
+      }
+    );
+
+    source.stream();
+    setQuestion("");
+  }, [question, isLoading, apiKey, direction, model]);
+
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === "Enter") handleSubmit();
   };
 
-  useEffect(() => {
-    // Perform localStorage action
-    const localKey = localStorage.getItem("apiKey");
-    if (localKey) {
-      setApiKey(localKey);
-    }
-    localStorage.setItem("model", model);
-  }, []);
-
-  useEffect(() => {
-    resultRef.current = answer;
-  }, [answer]);
+  const busy = status !== "idle";
 
   return (
-    <main className="mx-auto flex h-[100svh] w-full max-w-7xl overflow-hidden px-2 py-2 sm:px-4 sm:py-4 lg:h-[100vh] lg:px-8 lg:py-7">
-      <div className="glass-panel grid h-full w-full grid-rows-[minmax(0,1.08fr)_minmax(0,0.92fr)] gap-2 p-2 sm:gap-4 sm:p-4 xl:h-[calc(100vh-3.5rem)] xl:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] xl:grid-rows-1 xl:gap-6 xl:p-5">
-        <section className="flex min-h-0 flex-col gap-1.5 sm:gap-3">
-          <div className="grid gap-2 sm:grid-cols-[minmax(0,1fr)_210px] sm:gap-3">
-            <label className="flex flex-col gap-2">
-              <span className="badge-label bg-teal-300 text-teal-950">
-                API Key
-              </span>
-              <input
-                aria-label="API key"
-                className="field-input h-9 sm:h-10"
-                name="apiKey"
-                type="password"
-                placeholder="sk-..."
-                value={apiKey}
-                onChange={storeApiKey}
-              />
-            </label>
+    <main className="room">
+      <div className="chassis grain">
+        <Screws />
 
-            <label className="flex flex-col gap-2">
-              <span className="badge-label bg-cyan-300 text-cyan-950">
-                Model
-              </span>
-              <input
-                aria-label="Model"
-                className="field-input h-9 cursor-not-allowed opacity-80 sm:h-10"
-                value="GPT-3.5 Turbo"
-                readOnly
-              />
-            </label>
+        {/* ---- Header ---- */}
+        <div className="deck-head">
+          <div className="brandmark">
+            <span className="logo">AETHER·1</span>
+            <span className="sub">Neural Terminal</span>
           </div>
+          <div className="head-meters">
+            <span className="head-meta">SN&nbsp;47-Δ</span>
+            <Indic on color="green" label="PWR" status="live" />
+            <Grille />
+          </div>
+        </div>
 
-          <label className="flex flex-col gap-1.5 sm:gap-2">
-            <span className="badge-label bg-rose-300 text-rose-950">System</span>
-            <input
-              aria-label="System prompt"
-              className="field-input h-9 sm:h-10"
-              name="system"
-              value={direction}
-              onChange={(e) => setDirection(e.target.value)}
-            />
-          </label>
+        <div className="console">
+          {/* ========== LEFT: Control Panel ========== */}
+          <div className="bay grain">
+            <div className="control-stack">
+              {/* API Key + Model knob */}
+              <div className="row2">
+                <div>
+                  <div className="silk teal">API Key</div>
+                  <div className="well key">
+                    <input
+                      type="password"
+                      value={apiKey}
+                      onChange={storeApiKey}
+                      placeholder="sk-..."
+                      spellCheck={false}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <div className="silk cyan">Model</div>
+                  <Knob
+                    models={MODEL_LABELS}
+                    index={modelIdx}
+                    onCycle={cycleModel}
+                  />
+                </div>
+              </div>
 
-          <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4 sm:gap-2">
-            {ROLE_PRESETS.map((preset) => (
+              {/* System prompt + presets */}
+              <div>
+                <div className="silk pink">System</div>
+                <div className="well sys">
+                  <input
+                    type="text"
+                    value={direction}
+                    onChange={(e) => {
+                      setDirection(e.target.value);
+                      setActivePreset(null);
+                    }}
+                    spellCheck={false}
+                  />
+                </div>
+                <div className="presets">
+                  {ROLE_PRESETS.map((preset) => (
+                    <button
+                      key={preset.label}
+                      className={`pbtn${activePreset === preset.label ? " on" : ""}`}
+                      onClick={() => pickPreset(preset)}
+                    >
+                      <span className="dot" />
+                      {preset.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* User input */}
+              <div>
+                <div className="silk blue">User</div>
+                <div className="well user">
+                  <textarea
+                    value={question}
+                    onChange={(e) => setQuestion(e.target.value)}
+                    onKeyDown={onKeyDown}
+                    placeholder="Type your message…  (⌘/Ctrl + Enter to transmit)"
+                    spellCheck={false}
+                  />
+                </div>
+              </div>
+
+              {/* Submit */}
               <button
-                key={preset.label}
-                type="button"
-                className="action-button h-8 text-[11px] sm:h-9 sm:text-sm"
-                onClick={() => handleRoleChange(preset.direction)}
+                className={`submit${busy ? " busy" : ""}`}
+                onClick={handleSubmit}
+                disabled={isLoading}
               >
-                {preset.label}
+                {status === "processing"
+                  ? "Transmitting…"
+                  : status === "streaming"
+                    ? "Receiving…"
+                    : "Submit"}
               </button>
-            ))}
+            </div>
           </div>
 
-          <label className="flex min-h-0 grow flex-col gap-1.5 sm:gap-2">
-            <span className="badge-label bg-blue-300 text-blue-950">User</span>
-            <textarea
-              aria-label="User prompt"
-              className="field-input no-scrollbar min-h-0 grow resize-none p-3 text-sm leading-5 sm:p-4 sm:text-base sm:leading-6"
-              name="user"
-              value={question}
-              onChange={(e) => setQuestion(e.target.value)}
-            />
-          </label>
-
-          <button
-            disabled={isLoading}
-            className={`h-9 w-full rounded-xl border text-xs font-semibold tracking-wide transition duration-200 sm:h-10 sm:text-sm ${
-              isLoading
-                ? "cursor-not-allowed border-slate-500/35 bg-slate-700/70 text-slate-300"
-                : "border-blue-300/60 bg-blue-500/80 text-white hover:bg-blue-400/90"
-            }`}
-            onClick={handleSubmitPromptBtnClicked}
-          >
-            {isLoading ? "Loading..." : "Submit"}
-          </button>
-        </section>
-
-        <section className="flex min-h-0 flex-col">
-          <label className="flex h-full min-h-0 flex-col gap-1.5 sm:gap-2">
-            <span className="badge-label w-fit bg-emerald-300 text-emerald-950">
-              Assistant
-            </span>
-            <div className="field-input no-scrollbar h-full min-h-0 overflow-x-hidden overflow-y-auto rounded-2xl p-3 text-sm font-medium leading-6 sm:p-4 sm:text-base sm:leading-7">
-              {parseHTML ? (
-                <Markdown content={answer} />
-              ) : (
-                <div className="whitespace-pre-wrap">{answer}</div>
-              )}
+          {/* ========== RIGHT: CRT Display ========== */}
+          <div className="crt-bay grain">
+            <div className="crt-top">
+              <div className="silk green" style={{ margin: 0 }}>
+                Assistant
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
+                <Vu running={busy} />
+                <Indic
+                  on
+                  color={busy ? "amber" : "green"}
+                  label={
+                    status === "processing"
+                      ? "THINK"
+                      : status === "streaming"
+                        ? "STREAM"
+                        : "READY"
+                  }
+                  status={busy ? "busy" : "live"}
+                />
+              </div>
             </div>
-          </label>
-        </section>
+
+            <div className={`crt-screen${booting ? " booting" : ""}`}>
+              {booting && <span className="crt-boot" />}
+              <div className="crt-feed" ref={feedRef}>
+                {feed.map((m, i) => (
+                  <div
+                    key={i}
+                    className={`crt-line ${m.role === "user" ? "user" : ""}`}
+                  >
+                    <span className="who">{m.who}</span>
+                    {m.role === "user" ? (
+                      <span>{"> "}{m.text}</span>
+                    ) : parseHTML ? (
+                      <Markdown content={m.text} />
+                    ) : (
+                      <span style={{ whiteSpace: "pre-wrap" }}>{m.text}</span>
+                    )}
+                  </div>
+                ))}
+                {status === "processing" && (
+                  <div className="crt-line">
+                    <span className="who">ASSISTANT</span>
+                    <span style={{ opacity: 0.7 }}>thinking</span>
+                    <span className="cursor" />
+                  </div>
+                )}
+                {streamText && (
+                  <div className="crt-line">
+                    <span className="who">ASSISTANT</span>
+                    {parseHTML ? (
+                      <Markdown content={streamText} />
+                    ) : (
+                      <span style={{ whiteSpace: "pre-wrap" }}>
+                        {streamText}
+                      </span>
+                    )}
+                    <span className="cursor" />
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="crt-foot">
+              <span className="seg">MODEL: {MODEL_LABELS[modelIdx]}</span>
+              <span className="seg">
+                {activePreset
+                  ? `MODE: ${activePreset.toUpperCase()}`
+                  : "MODE: CHAT"}
+              </span>
+              <span className="seg">CH 01 · 38400 BAUD</span>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
   );

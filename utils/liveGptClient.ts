@@ -1,4 +1,4 @@
-import { SSE } from "sse";
+import { SSE } from "./sse";
 import { MAX_TOKENS, OPENAI_MODEL, OPENAI_URL } from "./config";
 
 const endPoint = process.env.NEXT_PUBLIC_OPENAI_URL ? process.env.NEXT_PUBLIC_OPENAI_URL : OPENAI_URL;

@@ -1,9 +1,16 @@
 import "./globals.css";
-import { Manrope } from "next/font/google";
+import { JetBrains_Mono, Manrope } from "next/font/google";
 
 const manrope = Manrope({
   subsets: ["latin"],
   variable: "--font-sans",
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-jetbrains",
   display: "swap",
 });
 
@@ -23,7 +30,19 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={manrope.variable}>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Saira+Semi+Condensed:wght@400;500;600;700&family=VT323&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body className={`${manrope.variable} ${jetbrainsMono.variable}`}>
         {children}
       </body>
     </html>
