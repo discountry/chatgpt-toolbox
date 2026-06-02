@@ -279,16 +279,19 @@ export default function App({
       (e: { readyState: number }) => {
         if (e.readyState >= 2) {
           tailRef.current = "";
+          const finalText = resultRef.current;
+          /* Clear stream text FIRST so it doesn't render alongside
+             the finalized feed entry in the same frame */
+          setStreamText("");
           setIsLoading(false);
           setStatus("idle");
           /* Finalize: push completed answer into feed */
-          if (resultRef.current) {
+          if (finalText) {
             setFeed((f) => [
               ...f,
-              { who: "ASSISTANT", text: resultRef.current, role: "asst" },
+              { who: "ASSISTANT", text: finalText, role: "asst" },
             ]);
           }
-          setStreamText("");
         }
       }
     );
