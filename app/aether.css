@@ -54,25 +54,14 @@
    ROOM (viewport background)
    ============================================================ */
 .room {
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: clamp(12px, 2.4vw, 40px);
   position: relative;
   overflow: hidden;
-  background:
-    radial-gradient(120% 90% at 50% -6%, #eef0f2 0%, #d3d6da 48%, #b9bcc1 100%);
+  background: var(--alu);
   font-family: var(--font-ui);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-}
-.room::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(130% 120% at 50% 62%, transparent 54%, rgba(40,44,50,0.22) 100%);
-  pointer-events: none;
 }
 
 /* ============================================================
@@ -80,18 +69,16 @@
    ============================================================ */
 .chassis {
   position: relative;
-  width: min(1280px, 100%);
-  border-radius: 16px;
-  padding: 16px 16px 18px;
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  padding: 16px 20px 18px;
+  display: flex;
+  flex-direction: column;
   background:
     linear-gradient(180deg, var(--alu-hi) 0%, var(--alu) 46%, var(--alu-lo) 100%);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.95),
-    inset 0 -1px 0 rgba(150,156,164,0.5),
-    inset 0 0 0 1px rgba(160,166,174,0.45),
-    0 30px 60px -24px rgba(40,46,54,0.5),
-    0 6px 18px rgba(60,66,74,0.18);
   isolation: isolate;
+  overflow: hidden;
 }
 
 /* fine brushed grain */
@@ -116,6 +103,7 @@
   justify-content: space-between;
   gap: 18px;
   padding: 4px 6px 14px;
+  flex-shrink: 0;
 }
 .brand { display: flex; flex-direction: column; gap: 1px; }
 .brand-title {
@@ -198,9 +186,10 @@
 /* seam between header and console */
 .seam {
   height: 0;
-  margin: 0 2px 16px;
+  margin: 0 2px 14px;
   border-top: 1px solid var(--seam-d);
   box-shadow: 0 1px 0 var(--seam-l);
+  flex-shrink: 0;
 }
 
 /* ============================================================
@@ -211,8 +200,10 @@
   grid-template-columns: 0.94fr 1.06fr;
   gap: 16px;
   align-items: stretch;
+  flex: 1;
+  min-height: 0;
 }
-@media (max-width: 900px) { .console { grid-template-columns: 1fr; } }
+@media (max-width: 900px) { .console { grid-template-columns: 1fr; overflow-y: auto; } }
 
 /* recessed functional zone */
 .bay {
@@ -225,7 +216,7 @@
     inset 0 0 0 1px rgba(160,166,174,0.4),
     inset 0 -1px 2px rgba(150,156,164,0.3);
 }
-.control-stack { display: flex; flex-direction: column; gap: 10px; }
+.control-stack { display: flex; flex-direction: column; gap: 10px; height: 100%; }
 
 /* control header: stacked fields + centered knob */
 .headrow { display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: center; }
@@ -291,8 +282,14 @@
   font-size: 13.5px;
   line-height: 1.6;
   min-height: 66px;
+  height: 100%;
 }
 .well.user textarea::placeholder { color: #b3b7bd; }
+
+/* Make the user input section grow to fill remaining vertical space */
+.well.user { flex: 1; display: flex; flex-direction: column; }
+.control-stack > div:has(.well.user) { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+.control-stack > div:has(.well.user) .well.user { flex: 1; }
 
 /* ============================================================
    ENCODER KNOB (model) — TE two-tier orange
@@ -528,6 +525,7 @@
   display: flex;
   flex-direction: column;
   min-height: 0;
+  overflow: hidden;
 }
 .crt-top {
   display: flex;
@@ -539,7 +537,7 @@
 .crt-screen {
   position: relative;
   flex: 1;
-  min-height: 220px;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   border-radius: 9px;
@@ -787,16 +785,16 @@
   .headrow { grid-template-columns: 1fr; gap: 12px; }
   .knobcol { flex-direction: row; gap: 12px; min-width: auto; }
   .presets { grid-template-columns: repeat(2, 1fr); }
-  .crt-screen { min-height: 200px; }
+  .crt-screen { min-height: 0; }
   .crt-feed { font-size: 12.5px; }
   .crt-foot { flex-wrap: wrap; gap: 6px; }
   .crt-foot .seg { font-size: 10px; }
 }
 
 @media (max-width: 500px) {
-  .chassis { padding: 10px 10px 12px; border-radius: 12px; }
+  .chassis { padding: 10px 10px 12px; }
   .statusbar .grille { display: none; }
-  .crt-screen { min-height: 180px; padding: 12px 14px; }
+  .crt-screen { min-height: 0; padding: 12px 14px; }
   .submit { padding: 12px; font-size: 13px; }
   .submit .slabel { letter-spacing: 0.22em; margin-right: -0.22em; }
 }
