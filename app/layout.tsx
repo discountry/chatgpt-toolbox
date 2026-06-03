@@ -1,24 +1,31 @@
 import "./globals.css";
-import { JetBrains_Mono, Manrope } from "next/font/google";
+import { Space_Grotesk, JetBrains_Mono, Noto_Sans_JP } from "next/font/google";
 
-const manrope = Manrope({
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-sans",
+  variable: "--font-space-grotesk",
   display: "swap",
 });
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  weight: ["400", "500", "600", "700"],
   variable: "--font-jetbrains",
   display: "swap",
 });
 
+const notoSansJP = Noto_Sans_JP({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  variable: "--font-noto-jp",
+  display: "swap",
+});
+
 export const metadata = {
-  title: "ChatGPT Toolbox",
-  description: "The ChatGPT that can store your prompts.",
+  title: "AETHER·1 Neural Terminal",
+  description: "AI Chat Composer",
   appleWebApp: {
-    title: "ChatGPT Toolbox",
+    title: "AETHER·1",
     statusBarStyle: "black-translucent",
   },
 };
@@ -30,19 +37,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Saira+Semi+Condensed:wght@400;500;600;700&family=VT323&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body className={`${manrope.variable} ${jetbrainsMono.variable}`}>
+      <body
+        className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} ${notoSansJP.variable}`}
+      >
         {children}
       </body>
     </html>

@@ -29,17 +29,6 @@ const ROLE_PRESETS = [
    Decorative sub-components (AETHER-1 terminal chrome)
    ============================================================ */
 
-function Screws() {
-  return (
-    <>
-      <span className="screw tl" />
-      <span className="screw tr" />
-      <span className="screw bl" />
-      <span className="screw br" />
-    </>
-  );
-}
-
 function Led({
   on,
   color = "amber",
@@ -76,29 +65,7 @@ function Indic({
   );
 }
 
-function Vu({ running }: { running: boolean }) {
-  return (
-    <span className={`vu${running ? " run" : ""}`}>
-      <i />
-      <i />
-      <i />
-      <i />
-      <i />
-      <i />
-    </span>
-  );
-}
-
-function Grille() {
-  return (
-    <span className="grille">
-      {Array.from({ length: 21 }).map((_, i) => (
-        <i key={i} />
-      ))}
-    </span>
-  );
-}
-
+/* Rotary encoder — cycles through the model list on click */
 function Knob({
   models,
   index,
@@ -109,8 +76,8 @@ function Knob({
   onCycle: () => void;
 }) {
   const n = models.length;
-  const arc = 270;
-  const start = -135;
+  const arc = 280;
+  const start = -140;
   const rot = n > 1 ? start + (arc / (n - 1)) * index : 0;
 
   return (
@@ -141,7 +108,6 @@ function Knob({
         </button>
       </div>
       <div className="knob-screen">{models[index]}</div>
-      <div className="knob-cap">Model · Turn to Set</div>
     </div>
   );
 }
@@ -305,84 +271,119 @@ export default function App({
   };
 
   const busy = status !== "idle";
+  const modeLabel = activePreset ? activePreset.toUpperCase() : "CHAT";
 
   return (
     <main className="room">
       <div className="chassis grain">
-        <Screws />
-
         {/* ---- Header ---- */}
         <div className="deck-head">
-          <div className="brandmark">
-            <span className="logo">AETHER·1</span>
-            <span className="sub">Neural Terminal</span>
+          <div className="brand">
+            <div className="brand-title">
+              AETHER·1<span className="reg">®</span>
+            </div>
+            <div className="brand-jp">ニューラル・ターミナル</div>
+            <div className="brand-sub">AI Chat Composer</div>
           </div>
-          <div className="head-meters">
-            <span className="head-meta">SN&nbsp;47-Δ</span>
-            <Indic on color="green" label="PWR" status="live" />
-            <Grille />
+          <div className="statusbar">
+            <span className="seg">
+              <Led on color="green" breathe /> PWR
+            </span>
+            <span className="div" />
+            <span className="seg">
+              CONN <span className="val">USB-C</span>
+            </span>
+            <span className="div" />
+            <span className="seg">
+              SN <span className="val">47-Δ</span>
+            </span>
+            <span className="div" />
+            <span className="grille" />
           </div>
         </div>
+        <div className="seam" />
 
         <div className="console">
           {/* ========== LEFT: Control Panel ========== */}
           <div className="bay grain">
             <div className="control-stack">
-              {/* API Key + Model knob */}
-              <div className="row2">
-                <div>
-                  <div className="silk teal">API Key</div>
-                  <div className="well key">
-                    <input
-                      type="password"
-                      value={apiKey}
-                      onChange={storeApiKey}
-                      placeholder="sk-..."
-                      spellCheck={false}
-                    />
+              {/* API Key + System fields + Model knob */}
+              <div className="headrow">
+                <div className="fields">
+                  <div>
+                    <div className="silk">
+                      <span className="tick" />
+                      API Key
+                    </div>
+                    <div className="well key">
+                      <input
+                        type="password"
+                        value={apiKey}
+                        onChange={storeApiKey}
+                        placeholder="sk-..."
+                        spellCheck={false}
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <div className="silk">
+                      <span className="tick" />
+                      System
+                    </div>
+                    <div className="well sys">
+                      <input
+                        type="text"
+                        value={direction}
+                        onChange={(e) => {
+                          setDirection(e.target.value);
+                          setActivePreset(null);
+                        }}
+                        spellCheck={false}
+                      />
+                    </div>
                   </div>
                 </div>
-                <div>
-                  <div className="silk cyan">Model</div>
+                <div className="knobcol">
+                  <div className="silk" style={{ margin: "0 0 4px" }}>
+                    Model
+                  </div>
                   <Knob
                     models={MODEL_LABELS}
                     index={modelIdx}
                     onCycle={cycleModel}
                   />
+                  <div className="bracket">
+                    <span>Engine</span>
+                  </div>
                 </div>
               </div>
 
-              {/* System prompt + presets */}
+              {/* Presets */}
               <div>
-                <div className="silk pink">System</div>
-                <div className="well sys">
-                  <input
-                    type="text"
-                    value={direction}
-                    onChange={(e) => {
-                      setDirection(e.target.value);
-                      setActivePreset(null);
-                    }}
-                    spellCheck={false}
-                  />
-                </div>
                 <div className="presets">
                   {ROLE_PRESETS.map((preset) => (
-                    <button
+                    <div
                       key={preset.label}
-                      className={`pbtn${activePreset === preset.label ? " on" : ""}`}
-                      onClick={() => pickPreset(preset)}
+                      className={`pcell${activePreset === preset.label ? " on" : ""}`}
                     >
-                      <span className="dot" />
-                      {preset.label}
-                    </button>
+                      <span className="pled" />
+                      <button
+                        className={`pbtn${activePreset === preset.label ? " on" : ""}`}
+                        onClick={() => pickPreset(preset)}
+                      >
+                        {preset.label}
+                      </button>
+                    </div>
                   ))}
                 </div>
               </div>
 
               {/* User input */}
               <div>
-                <div className="silk blue">User</div>
+                <div className="silk">
+                  <span className="tick" />
+                  User
+                </div>
                 <div className="well user">
                   <textarea
                     value={question}
@@ -400,11 +401,14 @@ export default function App({
                 onClick={handleSubmit}
                 disabled={isLoading}
               >
-                {status === "processing"
-                  ? "Transmitting…"
-                  : status === "streaming"
-                    ? "Receiving…"
-                    : "Submit"}
+                <span className="recled" />
+                <span className="slabel">
+                  {status === "processing"
+                    ? "Transmit…"
+                    : status === "streaming"
+                      ? "Receiving…"
+                      : "Transmit"}
+                </span>
               </button>
             </div>
           </div>
@@ -412,75 +416,97 @@ export default function App({
           {/* ========== RIGHT: CRT Display ========== */}
           <div className="crt-bay grain">
             <div className="crt-top">
-              <div className="silk green" style={{ margin: 0 }}>
+              <div className="silk" style={{ margin: 0 }}>
                 Assistant
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
-                <Vu running={busy} />
-                <Indic
-                  on
-                  color={busy ? "amber" : "green"}
-                  label={
-                    status === "processing"
-                      ? "THINK"
-                      : status === "streaming"
-                        ? "STREAM"
-                        : "READY"
-                  }
-                  status={busy ? "busy" : "live"}
-                />
-              </div>
+              <Indic
+                on
+                color={busy ? "amber" : "green"}
+                label={
+                  status === "processing"
+                    ? "THINK"
+                    : status === "streaming"
+                      ? "STREAM"
+                      : "READY"
+                }
+                status={busy ? "busy" : "live"}
+              />
             </div>
 
             <div className={`crt-screen${booting ? " booting" : ""}`}>
               {booting && <span className="crt-boot" />}
-              <div className="crt-feed" ref={feedRef}>
-                {feed.map((m, i) => (
-                  <div
-                    key={i}
-                    className={`crt-line ${m.role === "user" ? "user" : ""}`}
-                  >
-                    <span className="who">{m.who}</span>
-                    {m.role === "user" ? (
-                      <span>{"> "}{m.text}</span>
-                    ) : parseHTML ? (
-                      <Markdown content={m.text} />
-                    ) : (
-                      <span style={{ whiteSpace: "pre-wrap" }}>{m.text}</span>
-                    )}
-                  </div>
-                ))}
-                {status === "processing" && (
-                  <div className="crt-line">
-                    <span className="who">ASSISTANT</span>
-                    <span style={{ opacity: 0.7 }}>thinking</span>
-                    <span className="cursor" />
-                  </div>
-                )}
-                {streamText && (
-                  <div className="crt-line">
-                    <span className="who">ASSISTANT</span>
-                    {parseHTML ? (
-                      <Markdown content={streamText} />
-                    ) : (
-                      <span style={{ whiteSpace: "pre-wrap" }}>
-                        {streamText}
-                      </span>
-                    )}
-                    <span className="cursor" />
-                  </div>
-                )}
+              <div className="scr-status">
+                <span className={`sdot${busy ? " on" : " live"}`} />
+                <span className={`stxt${busy ? " hot" : ""}`}>
+                  {status === "processing"
+                    ? "PROCESSING"
+                    : status === "streaming"
+                      ? "STREAMING"
+                      : "ONLINE"}
+                </span>
+                <span className="spacer" />
+                <span className="stxt">{MODEL_LABELS[modelIdx]}</span>
+                <span className={`bars${busy ? " run" : ""}`}>
+                  <i />
+                  <i />
+                  <i />
+                  <i />
+                </span>
+              </div>
+              <div className="feedwrap">
+                <div className="crt-feed" ref={feedRef}>
+                  {feed.map((m, i) => (
+                    <div
+                      key={i}
+                      className={`crt-line ${m.role === "user" ? "user" : ""}`}
+                    >
+                      <span className="who">{m.who}</span>
+                      {m.role === "user" ? (
+                        <span>
+                          {"> "}
+                          {m.text}
+                        </span>
+                      ) : parseHTML ? (
+                        <Markdown content={m.text} />
+                      ) : (
+                        <span style={{ whiteSpace: "pre-wrap" }}>{m.text}</span>
+                      )}
+                    </div>
+                  ))}
+                  {status === "processing" && (
+                    <div className="crt-line">
+                      <span className="who">ASSISTANT</span>
+                      <span style={{ opacity: 0.7 }}>thinking</span>
+                      <span className="cursor" />
+                    </div>
+                  )}
+                  {streamText && (
+                    <div className="crt-line">
+                      <span className="who">ASSISTANT</span>
+                      {parseHTML ? (
+                        <Markdown content={streamText} />
+                      ) : (
+                        <span style={{ whiteSpace: "pre-wrap" }}>
+                          {streamText}
+                        </span>
+                      )}
+                      <span className="cursor" />
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
             <div className="crt-foot">
-              <span className="seg">MODEL: {MODEL_LABELS[modelIdx]}</span>
               <span className="seg">
-                {activePreset
-                  ? `MODE: ${activePreset.toUpperCase()}`
-                  : "MODE: CHAT"}
+                MODE <b>{modeLabel}</b>
               </span>
-              <span className="seg">CH 01 · 38400 BAUD</span>
+              <span className="seg">
+                CH <b>01</b>
+              </span>
+              <span className="seg">
+                38400 <b>BAUD</b>
+              </span>
             </div>
           </div>
         </div>
